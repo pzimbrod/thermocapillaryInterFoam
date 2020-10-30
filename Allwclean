@@ -1,0 +1,10 @@
+#!/bin/sh
+cd "${0%/*}" || exit    # Run from this directory
+
+wclean libso phasesSystem
+wclean libso massTransferModels
+wclean libso CompressibleMultiPhaseTurbulenceModels
+wclean libso laserDTRM
+wclean
+
+#------------------------------------------------------------------------------
