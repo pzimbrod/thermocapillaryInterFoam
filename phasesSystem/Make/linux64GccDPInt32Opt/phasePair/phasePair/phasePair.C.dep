@@ -589,6 +589,6 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/uniformDimensionedFields.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/UniformDimensionedField.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/UniformDimensionedField.C \
 phasePair/phasePair/phasePairI.H \
-$(WM_PROJECT_DIR)/src/transportModels/interfaceProperties/lnInclude/surfaceTensionModel.H \
+/home/patrick/OpenFOAM/patrick-v2006/src/transportModels/interfaceProperties/lnInclude/surfaceTensionModel.H \
 
 

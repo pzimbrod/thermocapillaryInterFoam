@@ -603,7 +603,7 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/coupledFvPatchField.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/coupledFvPatch.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/coupledFvPatchField.C \
 phaseSystem/phaseSystemTemplates.H \
-$(WM_PROJECT_DIR)/src/transportModels/interfaceProperties/lnInclude/surfaceTensionModel.H \
+/home/patrick/OpenFOAM/patrick-v2006/src/transportModels/interfaceProperties/lnInclude/surfaceTensionModel.H \
 lnInclude/porousModel.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/HashPtrTable.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/HashPtrTableI.H \
