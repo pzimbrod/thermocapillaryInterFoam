@@ -475,6 +475,41 @@ namespace Foam
             hPowerSolidThermoPhysics
         );
 
+    /*---------------------------------------------------------------------------*\
+    |              Additional thermophysical Models in lpbfFoam                   |
+    \*---------------------------------------------------------------------------*/
+
+
+        // Solidification: 
+        // From pure phase (ico-poly) to phase (solidThermo)
+        makeInterfacePureType
+        (
+            Lee,
+            heRhoThermo,
+            rhoThermo,
+            pureMixture,
+            icoPoly8HThermoPhysics,
+            heSolidThermo,
+            solidThermo,
+            pureMixture,
+            hPolyTranspPolyIcoSolidThermoPhysics
+        );
+
+        // Evaporation:
+        // From pure liquid (ico-poly) to a multi-component gas incomp phase
+        makeInterfaceContSpecieMixtureType
+        (
+            kineticGasEvaporation,
+            heRhoThermo,
+            rhoThermo,
+            pureMixture,
+            icoPoly8HThermoPhysics,
+            heRhoThermo,
+            rhoReactionThermo,
+            multiComponentMixture,
+            constIncompressibleGasHThermoPhysics
+        );
+
 }
 
 
