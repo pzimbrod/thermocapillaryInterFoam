@@ -1078,16 +1078,11 @@ Foam::phaseSystem::marangoniForce
                 *
                 (
                     fvc::snGrad(T)
-		    *
+		            -
                     (
                       (
                         fvc::interpolate(alpha2) * fvc::snGrad(alpha1)
                         - fvc::interpolate(alpha1) * fvc::snGrad(alpha2)
-                      )
-                      *
-                      (
-                        fvc::interpolate(alpha2)*fvc::snGrad(alpha1)
-                        - fvc::interpolate(alpha1)*fvc::snGrad(alpha2)
                       )
                       *
                       fvc::snGrad(T)
