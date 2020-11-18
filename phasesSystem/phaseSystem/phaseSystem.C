@@ -37,6 +37,12 @@ License
 #include "fvcDiv.H"
 #include "fvMatrix.H"
 
+// Neue Includes für Marangoni
+#include "fvPatchFieldMapper.H"
+#include "volFields.H"
+#include "surfaceFields.H"
+#include "symmTransformField.H"
+
 #include "zeroGradientFvPatchFields.H"
 #include "fixedEnergyFvPatchScalarField.H"
 #include "gradientEnergyFvPatchScalarField.H"
@@ -1034,13 +1040,13 @@ Foam::phaseSystem::surfaceTensionForce() const
 
 
 // Marangoni Force implementation
-Foam::tmp<Foam::surfaceScalarField>
+Foam::tmp<Foam::surfaceVectorField>
 Foam::phaseSystem::marangoniForce
 (		
     const volScalarField& T
 ) const
 {
-    auto tmaf = tmp<surfaceScalarField>::New
+    auto tmaf = tmp<surfaceVectorField>::New
     (
         IOobject
         (
@@ -1049,7 +1055,7 @@ Foam::phaseSystem::marangoniForce
             mesh_
         ),
         mesh_,
-        dimensionedScalar({1, -2, -2, 0, 0, 0}, Zero)
+        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
     );
 
     auto& maf = tmaf.ref();
@@ -1066,6 +1072,7 @@ Foam::phaseSystem::marangoniForce
             for (++iter2; iter2 != phaseModels_.cend(); ++iter2)
             {
                 const volScalarField& alpha2 = iter2()();
+                //tmp<surfaceVectorField> tnHatfv = nHatfv(alpha1, alpha2);
 
                 maf +=
                     fvc::interpolate
@@ -1075,19 +1082,21 @@ Foam::phaseSystem::marangoniForce
                             phasePairKey(iter1()->name(), iter2()->name())
                         )
                     )
-                *
-                (
-                    fvc::snGrad(T)
-		            -
+                    *
                     (
-                      (
-                        fvc::interpolate(alpha2) * fvc::snGrad(alpha1)
-                        - fvc::interpolate(alpha1) * fvc::snGrad(alpha2)
-                      )
-                      *
-                      fvc::snGrad(T)
-                    )
-                );
+                        fvc::interpolate(fvc::grad(T))
+                        *
+                        (
+                            1
+                            -
+                            (
+                                fvc::interpolate(alpha2)*fvc::snGrad(alpha1)
+                                - fvc::interpolate(alpha1)*fvc::snGrad(alpha2)
+                            )
+                        )
+
+                    );
+                    //fvc::interpolate(fvc::grad(T));
             }
         }
     }

@@ -491,7 +491,7 @@ public:
         ) const;
 
 	//- Calculate marangoni force of the mixture
-	tmp<surfaceScalarField> marangoniForce
+	tmp<surfaceVectorField> marangoniForce
 	(
             const volScalarField& T
 	) const;

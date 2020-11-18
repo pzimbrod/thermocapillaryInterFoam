@@ -663,6 +663,9 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/clockValueI.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/clockTimeI.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/PrecisionAdaptor.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/fvScalarMatrix.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/symmTransformField.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/symmTransform.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/symmTransformField.C \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/zeroGradientFvPatchFields.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/zeroGradientFvPatchField.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/zeroGradientFvPatchField.C \
