@@ -38,10 +38,7 @@ License
 #include "fvMatrix.H"
 
 // Neue Includes für Marangoni
-#include "fvPatchFieldMapper.H"
-#include "volFields.H"
-#include "surfaceFields.H"
-#include "symmTransformField.H"
+#include "fvcReconstruct.H"
 
 #include "zeroGradientFvPatchFields.H"
 #include "fixedEnergyFvPatchScalarField.H"
@@ -987,7 +984,7 @@ const Foam::fvMesh& Foam::phaseSystem::mesh() const
     return mesh_;
 }
 
-
+/*
 Foam::tmp<Foam::surfaceScalarField>
 Foam::phaseSystem::surfaceTensionForce() const
 {
@@ -1037,29 +1034,35 @@ Foam::phaseSystem::surfaceTensionForce() const
 
     return tstf;
 }
+*/
 
-
-// Marangoni Force implementation
-Foam::tmp<Foam::surfaceVectorField>
-Foam::phaseSystem::marangoniForce
-(		
-    const volScalarField& T
-) const
+// Implementation of the capillary Stress tensor
+Foam::tmp<Foam::volTensorField>
+Foam::phaseSystem::capillaryStress() const
 {
-    auto tmaf = tmp<surfaceVectorField>::New
+    auto tcst = tmp<volTensorField>::New
     (
         IOobject
         (
-            "marangoniForce",
+            "capillaryStressTensor",
             mesh_.time().timeName(),
             mesh_
         ),
         mesh_,
-        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
+        dimensionedTensor({1, -2, -2, 0, 0, 0}, Zero)
     );
 
-    auto& maf = tmaf.ref();
-    maf.setOriented();
+    auto& cst = tcst.ref();
+    cst.setOriented();
+
+    /*
+        Implementation of the capillary stress tensor
+        with the Continuous Surface Stress Method
+        iaw Brackbill et al., 1992, Lafaurie et al. 1994
+        T = - sigma * (I - n x n) * mag(grad(alpha))
+          = - sigma * (I * mag(grad(alpha)) - (grad(alpha) x grad(alpha)) /
+            mag(grad(alpha)))
+    */
 
     if (surfaceTensionModels_.size())
     {
@@ -1072,36 +1075,56 @@ Foam::phaseSystem::marangoniForce
             for (++iter2; iter2 != phaseModels_.cend(); ++iter2)
             {
                 const volScalarField& alpha2 = iter2()();
-                //tmp<surfaceVectorField> tnHatfv = nHatfv(alpha1, alpha2);
 
-                maf +=
-                    fvc::interpolate
-                    (
-                        dSigmadT
+                volVectorField gradAlphaf
+                (
+                    alpha2*fvc::grad(alpha1)
+                    - alpha1*fvc::grad(alpha2)
+                );
+
+                cst +=
+                        surfaceTensionCoeff
                         (
                             phasePairKey(iter1()->name(), iter2()->name())
                         )
-                    )
                     *
                     (
-                        fvc::interpolate(fvc::grad(T))
-                        *
-                        (
-                            1
-                            -
-                            (
-                                fvc::interpolate(alpha2)*fvc::snGrad(alpha1)
-                                - fvc::interpolate(alpha1)*fvc::snGrad(alpha2)
-                            )
-                        )
-
-                    );
-                    //fvc::interpolate(fvc::grad(T));
+                        tensor::one
+                        -
+                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                    )
+                    *
+                    mag(gradAlphaf);
             }
         }
     }
 
-    return tmaf;
+    return tcst;
+}
+
+
+// New implementation of the surface tension force
+Foam::tmp<Foam::surfaceVectorField>
+Foam::phaseSystem::surfaceTensionForce() const
+{
+    auto tstf = tmp<surfaceVectorField>::New
+    (
+        IOobject
+        (
+            "surfaceTensionForce",
+            mesh_.time().timeName(),
+            mesh_
+        ),
+        mesh_,
+        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
+    );
+
+    auto& stf = tstf.ref();
+    stf.setOriented();
+
+    stf += fvc::interpolate(fvc::div(capillaryStress()));
+
+    return tstf;
 }
 
 
@@ -1268,6 +1291,29 @@ Foam::tmp<Foam::surfaceVectorField> Foam::phaseSystem::nHatfv
     (
         fvc::interpolate(alpha2)*fvc::interpolate(fvc::grad(alpha1))
       - fvc::interpolate(alpha1)*fvc::interpolate(fvc::grad(alpha2))
+    );
+
+    const dimensionedScalar deltaN
+    (
+        "deltaN",
+        1e-8/cbrt(average(mesh_.V()))
+    );
+
+    // Face unit interface normal
+    return gradAlphaf/(mag(gradAlphaf) + deltaN);
+}
+
+Foam::tmp<Foam::volVectorField> Foam::phaseSystem::nHat
+(
+    const volScalarField& alpha1,
+    const volScalarField& alpha2
+) const
+{
+
+    volVectorField gradAlphaf
+    (
+        alpha2*fvc::grad(alpha1)
+      - alpha1*fvc::grad(alpha2)
     );
 
     const dimensionedScalar deltaN

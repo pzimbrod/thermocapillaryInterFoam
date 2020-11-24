@@ -482,7 +482,7 @@ public:
     // Surface tension
 
         //- Calculate surface tension of the mixture
-        tmp<surfaceScalarField> surfaceTensionForce() const;
+        tmp<surfaceVectorField> surfaceTensionForce() const;
 
         //- Return the surface tension coefficient
         virtual tmp<volScalarField> surfaceTensionCoeff
@@ -491,10 +491,7 @@ public:
         ) const;
 
 	//- Calculate marangoni force of the mixture
-	tmp<surfaceVectorField> marangoniForce
-	(
-            const volScalarField& T
-	) const;
+	tmp<volTensorField> capillaryStress() const;
 
 	//- Return the surface tension temperature dependence
 	virtual tmp<volScalarField> dSigmadT
@@ -619,6 +616,13 @@ public:
 
         //- Interface normal surface vector
         tmp<surfaceVectorField> nHatfv
+        (
+            const volScalarField& alpha1,
+            const volScalarField& alpha2
+        ) const;
+
+        //- Interface normal vector
+        tmp<volVectorField> nHat
         (
             const volScalarField& alpha1,
             const volScalarField& alpha2
