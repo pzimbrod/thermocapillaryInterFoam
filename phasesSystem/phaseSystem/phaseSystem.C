@@ -1037,10 +1037,10 @@ Foam::phaseSystem::surfaceTensionForce() const
 */
 
 // Implementation of the capillary Stress tensor
-Foam::tmp<Foam::volTensorField>
-Foam::phaseSystem::capillaryStress() const
+Foam::tmp<Foam::volVectorField>
+Foam::phaseSystem::divCapillaryStress() const
 {
-    auto tcst = tmp<volTensorField>::New
+    auto tcst = tmp<volVectorField>::New
     (
         IOobject
         (
@@ -1049,7 +1049,7 @@ Foam::phaseSystem::capillaryStress() const
             mesh_
         ),
         mesh_,
-        dimensionedTensor({1, -2, -2, 0, 0, 0}, Zero)
+        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
     );
 
     auto& cst = tcst.ref();
@@ -1083,18 +1083,38 @@ Foam::phaseSystem::capillaryStress() const
                 );
 
                 cst +=
+                    (
+                    (
+                        tensor::one
+                        -
+                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                    )
+                    &
+                    fvc::grad
+                    (
                         surfaceTensionCoeff
                         (
                             phasePairKey(iter1()->name(), iter2()->name())
                         )
+                    )
+                    )
                     *
+                    mag(gradAlphaf)
+                    -
+                    surfaceTensionCoeff
+                    (
+                        phasePairKey(iter1()->name(), iter2()->name())
+                    )
+                    *
+                    fvc::div
                     (
                         tensor::one
                         -
                         nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                     )
                     *
-                    mag(gradAlphaf);
+                    mag(gradAlphaf)
+                    ;
             }
         }
     }
@@ -1122,7 +1142,7 @@ Foam::phaseSystem::surfaceTensionForce() const
     auto& stf = tstf.ref();
     stf.setOriented();
 
-    stf += fvc::interpolate(fvc::div(capillaryStress()));
+    stf += fvc::interpolate(divCapillaryStress());
 
     return tstf;
 }

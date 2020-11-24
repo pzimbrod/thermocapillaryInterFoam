@@ -491,7 +491,7 @@ public:
         ) const;
 
 	//- Calculate marangoni force of the mixture
-	tmp<volTensorField> capillaryStress() const;
+	tmp<volVectorField> divCapillaryStress() const;
 
 	//- Return the surface tension temperature dependence
 	virtual tmp<volScalarField> dSigmadT
