@@ -482,7 +482,10 @@ public:
     // Surface tension
 
         //- Calculate surface tension of the mixture
-        tmp<surfaceVectorField> surfaceTensionForce() const;
+        tmp<surfaceScalarField> surfaceTensionForce() const;
+
+        //- Calculate magnitude of surface tension of the mixture
+        //tmp<surfaceScalarField> magSurfaceTensionForce() const;
 
         //- Return the surface tension coefficient
         virtual tmp<volScalarField> surfaceTensionCoeff
@@ -490,7 +493,7 @@ public:
             const phasePairKey& key
         ) const;
 
-	//- Calculate marangoni force of the mixture
+	//- Calculate divergence of the capillary stress tensor
 	tmp<volVectorField> divCapillaryStress() const;
 
 	//- Return the surface tension temperature dependence

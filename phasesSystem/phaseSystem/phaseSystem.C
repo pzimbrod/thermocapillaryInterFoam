@@ -39,6 +39,7 @@ License
 
 // Neue Includes für Marangoni
 #include "fvcReconstruct.H"
+#include "Identity.H"
 
 #include "zeroGradientFvPatchFields.H"
 #include "fixedEnergyFvPatchScalarField.H"
@@ -1036,7 +1037,10 @@ Foam::phaseSystem::surfaceTensionForce() const
 }
 */
 
-// Implementation of the capillary Stress tensor
+// Implementation of the capillary Stress tensor divergence
+// Foundation for capillary force calculation
+// First term accounts for Marangoni effects
+// Second term is equivalent to Lafaurie et al., 1994, Appendix
 Foam::tmp<Foam::volVectorField>
 Foam::phaseSystem::divCapillaryStress() const
 {
@@ -1053,7 +1057,7 @@ Foam::phaseSystem::divCapillaryStress() const
     );
 
     auto& cst = tcst.ref();
-    cst.setOriented();
+    //cst.setOriented();
 
     /*
         Implementation of the capillary stress tensor
@@ -1085,7 +1089,7 @@ Foam::phaseSystem::divCapillaryStress() const
                 cst +=
                     (
                     (
-                        tensor::one
+                        tensor::I
                         -
                         nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                     )
@@ -1123,11 +1127,12 @@ Foam::phaseSystem::divCapillaryStress() const
 }
 
 
-// New implementation of the surface tension force
-Foam::tmp<Foam::surfaceVectorField>
+// New implementation of the capillary force as vector
+// Surface interpolation from divCapillaryStress()
+Foam::tmp<Foam::surfaceScalarField>
 Foam::phaseSystem::surfaceTensionForce() const
 {
-    auto tstf = tmp<surfaceVectorField>::New
+    auto tstfv = tmp<surfaceScalarField>::New
     (
         IOobject
         (
@@ -1136,17 +1141,42 @@ Foam::phaseSystem::surfaceTensionForce() const
             mesh_
         ),
         mesh_,
-        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
+        dimensionedScalar({1, -2, -2, 0, 0, 0}, Zero)
+    );
+
+    auto& stfv = tstfv.ref();
+    
+
+    stfv += mag(fvc::interpolate(divCapillaryStress()));
+    stfv.setOriented();
+
+    return tstfv;
+}
+
+/*
+Foam::tmp<Foam::surfaceScalarField>
+Foam::phaseSystem::magSurfaceTensionForce() const
+{
+    auto tstf = tmp<surfaceScalarField>::New
+    (
+        IOobject
+        (
+            "magSurfaceTensionForce",
+            mesh_.time().timeName(),
+            mesh_
+        ),
+        mesh_,
+        dimensionedScalar({1, -2, -2, 0, 0, 0}, Zero)
     );
 
     auto& stf = tstf.ref();
-    stf.setOriented();
+    stf.setOriented(false);
 
-    stf += fvc::interpolate(divCapillaryStress());
+    stf += mag(surfaceTensionForce());
 
     return tstf;
 }
-
+*/
 
 Foam::tmp<Foam::volVectorField> Foam::phaseSystem::U() const
 {
