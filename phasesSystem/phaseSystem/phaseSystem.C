@@ -1112,7 +1112,7 @@ Foam::phaseSystem::divCapillaryStress() const
                     *
                     fvc::div
                     (
-                        tensor::one
+                        tensor::I
                         -
                         nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                     )
