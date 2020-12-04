@@ -33,9 +33,9 @@ The gradient of the surface tension coefficient is computed explicitly in the co
 
 The thory is based on the following references:
 
-> [1] B. Lafaurie, C. Nardone, R. Scardovelli, S. Zaleski, und G. Zanetti, „Modelling Merging and Fragmentation in Multiphase Flows with SURFER“, Journal of Computational Physics, Bd. 113, Nr. 1, S. 134–147, Juli 1994, doi: 10.1006/jcph.1994.1123.
+> [1] B. Lafaurie, C. Nardone, R. Scardovelli, S. Zaleski, und G. Zanetti, „Modelling Merging and Fragmentation in Multiphase Flows with SURFER“, Journal of Computational Physics, Bd. 113, Nr. 1, S. 134–147, Juli 1994, doi: [10.1006/jcph.1994.1123](http://doi.org/10.1006/jcph.1994.1123).
 
-> [2] D. Gueyffier, J. Li, A. Nadim, R. Scardovelli, und S. Zaleski, „Volume-of-Fluid Interface Tracking with Smoothed Surface Stress Methods for Three-Dimensional Flows“, Journal of Computational Physics, Bd. 152, Nr. 2, S. 423–456, Juli 1999, doi: 10.1006/jcph.1998.6168.
+> [2] D. Gueyffier, J. Li, A. Nadim, R. Scardovelli, und S. Zaleski, „Volume-of-Fluid Interface Tracking with Smoothed Surface Stress Methods for Three-Dimensional Flows“, Journal of Computational Physics, Bd. 152, Nr. 2, S. 423–456, Juli 1999, doi: [10.1006/jcph.1998.6168](http://doi.org/10.1006/jcph.1998.6168).
 
 ## Usage
 
