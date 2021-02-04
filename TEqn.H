@@ -4,6 +4,9 @@
     
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     //- Debug Information
+    Info<< "min/max(rho) = "
+	<< min(fluid.rho()).value() << ", " << max(fluid.rho()).value() << endl;
+
     Info<< "min/max(Cp) = "
 	<< min(fluid.Cp()).value() << ", " << max(fluid.Cp()).value() << endl;
 

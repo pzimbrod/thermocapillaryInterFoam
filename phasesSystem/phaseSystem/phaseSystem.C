@@ -985,7 +985,7 @@ const Foam::fvMesh& Foam::phaseSystem::mesh() const
     return mesh_;
 }
 
-/*
+
 Foam::tmp<Foam::surfaceScalarField>
 Foam::phaseSystem::surfaceTensionForce() const
 {
@@ -1035,7 +1035,7 @@ Foam::phaseSystem::surfaceTensionForce() const
 
     return tstf;
 }
-*/
+
 
 // Implementation of the capillary Stress tensor divergence
 // Foundation for capillary force calculation
@@ -1087,24 +1087,26 @@ Foam::phaseSystem::divCapillaryStress() const
                 );
 
                 cst +=
+                    mag(gradAlphaf)
+                    *
                     (
-                    (
-                        tensor::I
-                        -
-                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                    )
-                    &
-                    fvc::grad
-                    (
-                        surfaceTensionCoeff
                         (
-                            phasePairKey(iter1()->name(), iter2()->name())
+                            (
+                                tensor::I
+                                -
+                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                            )
+                            &
+                            fvc::grad
+                            (
+                                surfaceTensionCoeff
+                                (
+                                    phasePairKey(iter1()->name(), iter2()->name())
+                                )
+                            )
                         )
                     )
-                    )
-                    *
-                    mag(gradAlphaf)
-                    -
+                    +
                     surfaceTensionCoeff
                     (
                         phasePairKey(iter1()->name(), iter2()->name())
@@ -1124,9 +1126,10 @@ Foam::phaseSystem::divCapillaryStress() const
     }
 
     return tcst;
+    
 }
 
-
+/*
 // New implementation of the capillary force as vector
 // Surface interpolation from divCapillaryStress()
 Foam::tmp<Foam::surfaceScalarField>
@@ -1152,7 +1155,7 @@ Foam::phaseSystem::surfaceTensionForce() const
 
     return tstfv;
 }
-
+*/
 /*
 Foam::tmp<Foam::surfaceScalarField>
 Foam::phaseSystem::magSurfaceTensionForce() const
