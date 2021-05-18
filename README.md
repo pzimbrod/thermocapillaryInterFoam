@@ -15,9 +15,8 @@ Source Code for a custom solver, based von OpenFOAM v2006 solver `icoReactingMul
 
 The numerical implementation of capillary physics uses the capillary stress tensor formulation:
 
-```math
-    \frac{\partial T_{i,j}}{\partial x_j} = \frac{\partial}{\partial x_j} \left[ \sigma \delta_s \left(\delta_{i,j} - n_i n_j \right)\right] 
-```
+<img src="https://render.githubusercontent.com/render/math?math=\frac{\partial T_{i,j}}{\partial x_j} = \frac{\partial}{\partial x_j} \left[ \sigma \delta_s \left(\delta_{i,j} - n_i n_j \right)\right]">
+
 
 Which in a finite volume framework translates to:
 
