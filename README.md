@@ -17,16 +17,11 @@ The numerical implementation of capillary physics uses the capillary stress tens
 
 <img src="https://render.githubusercontent.com/render/math?math=\frac{\partial T_{i,j}}{\partial x_j} = \frac{\partial}{\partial x_j} \left[ \sigma \delta_s \left(\delta_{i,j} - n_i n_j \right)\right]">
 
-
 Which in a finite volume framework translates to:
 
-```math
-    \delta_s = \left\lvert \frac{\partial \alpha}{\partial x_i} \right\rvert
-```
+<img src="https://render.githubusercontent.com/render/math?math=\delta_s = \left\lvert \frac{\partial \alpha}{\partial x_i} \right\rvert">
 
-```math
-    n_i = \frac{1}{\left\lvert \frac{\partial \alpha}{\partial x_i} \right\rvert} \frac{\partial \alpha}{\partial x_i}
-```
+<img src="https://render.githubusercontent.com/render/math?math=n_i = \frac{1}{\left\lvert \frac{\partial \alpha}{\partial x_i} \right\rvert} \frac{\partial \alpha}{\partial x_i}">
 
 The gradient of the surface tension coefficient is computed explicitly in the code. Therefore, the model can account for Marangoni forces due to temperature gradients (as long as the coefficient itself is being modelled as a function of temperature using `temperatureDependent`) and concentration gradients, using the species modelling capabilities.
 
