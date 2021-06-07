@@ -1,0 +1,13 @@
+sudo: required
+
+services:
+    - docker
+
+script:
+    - docker pull debian:unstable
+    - docker build .
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
