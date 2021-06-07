@@ -480,7 +480,7 @@ namespace Foam
     \*---------------------------------------------------------------------------*/
 
 
-        // Solidification: 
+        // Solidification:
         // From pure phase (ico-poly) to phase (solidThermo)
         makeInterfacePureType
         (
