@@ -35,9 +35,6 @@ The thory is based on the following references:
 
 This solver uses a set of proprietary models that come with it. For the original compilation, OpenFOAM ESI in Version 2006 was used. Upwards and downwards compatibility can not be ensured, but should likely be possible with few modifications to the Makefiles.
 
-Some models require additional libraries, though. Use the separately hosted, custom libraries and save them in:
-```$WM_PROJECT_USER_DIR/src```
-
 Compile the source code using the `Allwmake` script. Requires the standard set of compilers used by standard OpenFOAM installations.
 
 ## Citing
