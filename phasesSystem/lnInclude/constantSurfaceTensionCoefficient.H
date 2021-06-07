@@ -1,1 +1,0 @@
-../interfaceModels/surfaceTensionModels/constantSurfaceTensionCoefficient/constantSurfaceTensionCoefficient.H

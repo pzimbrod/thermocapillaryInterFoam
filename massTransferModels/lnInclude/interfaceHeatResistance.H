@@ -1,1 +1,0 @@
-../interfaceHeatResistance/interfaceHeatResistance.H
