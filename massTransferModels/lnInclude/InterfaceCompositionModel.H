@@ -1,1 +1,1 @@
-../interfaceCompositionModel/interfaceCompositionModel.H
+../InterfaceCompositionModel/InterfaceCompositionModel.H

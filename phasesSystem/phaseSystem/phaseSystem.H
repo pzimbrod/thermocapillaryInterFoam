@@ -497,10 +497,12 @@ public:
 	tmp<volVectorField> divCapillaryStress() const;
 
 	//- Return the surface tension temperature dependence
+	/*
 	virtual tmp<volScalarField> dSigmadT
 	(
 	    const phasePairKey& key
 	) const;
+	*/
 
         //- Return coefficients (1/rho)
         virtual tmp<volScalarField> coeffs(const word& key) const;

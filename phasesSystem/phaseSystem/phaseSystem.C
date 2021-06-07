@@ -1214,11 +1214,13 @@ Foam::phaseSystem::surfaceTensionCoeff(const phasePairKey& key) const
 
 
 //- Read the surface tension temperature dependence
+/*
 Foam::tmp<Foam::volScalarField>
 Foam::phaseSystem::dSigmadT(const phasePairKey& key) const
 {
     return surfaceTensionModels_[key]->dSigmadT();
 }
+*/
 
 Foam::tmp<Foam::volScalarField> Foam::phaseSystem::coeffs
 (
