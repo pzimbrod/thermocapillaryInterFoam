@@ -1,6 +1,9 @@
+[![DOI](https://zenodo.org/badge/368456876.svg)](https://zenodo.org/badge/latestdoi/368456876)
+
 # OpenFOAM custom solver `lpbfFoam`
 
-Source Code for a custom solver, based von OpenFOAM v2006 solver `icoReactingMultiphaseInterFoam`.
+Source Code for a custom solver, based von OpenFOAM v2006 solver `icoReactingMultiphaseInterFoam`. Its main intended purpose is to model Powder Bed Fusion additive manufacturing (PBF), hence the name.
+This solver was created due to the lack of a universal formulation for surface tension in the standard solvers. It has been shown however that marangoni stresses influence melt pools during laser melting considerably. This aims to provide a formulation that resolves those stresses in an explicit manner.
 
 ## Features
 
