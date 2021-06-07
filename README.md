@@ -1,4 +1,9 @@
 [![DOI](https://zenodo.org/badge/368456876.svg)](https://zenodo.org/badge/latestdoi/368456876)
+![GitHub](https://img.shields.io/github/license/pzimbrod/lpbfFoam)
+![foam](https://img.shields.io/badge/made%20for-OpenFOAM-blue)
+![2006](https://img.shields.io/badge/Version-2006-green)
+![GitHub issues](https://img.shields.io/github/issues/pzimbrod/lpbfFoam)
+![GitHub last commit](https://img.shields.io/github/last-commit/pzimbrod/lpbfFoam)
 
 # OpenFOAM custom solver `lpbfFoam`
 
