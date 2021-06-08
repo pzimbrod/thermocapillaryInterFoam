@@ -2,7 +2,7 @@
 ![GitHub](https://img.shields.io/github/license/pzimbrod/lpbfFoam)
 ![Travis (.org)](https://api.travis-ci.com/pzimbrod/lpbfFoam.svg?branch=master)
 ![foam](https://img.shields.io/badge/made%20for-OpenFOAM-blue)
-![2006](https://img.shields.io/badge/Version-2006-green)
+![2006](https://img.shields.io/badge/Version-2006-blue)
 ![GitHub issues](https://img.shields.io/github/issues/pzimbrod/lpbfFoam)
 ![GitHub last commit](https://img.shields.io/github/last-commit/pzimbrod/lpbfFoam)
 
