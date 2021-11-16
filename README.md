@@ -50,4 +50,4 @@ Clone the repo and compile the source code using the `Allwmake` script. Requires
 
 ## Citing
 
-Please consider citing this code when using it in your projects.
+Please cite this code when using it in your projects.
