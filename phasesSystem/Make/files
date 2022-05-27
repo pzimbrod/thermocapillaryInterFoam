@@ -18,11 +18,11 @@ porous = interfaceModels/porousModels
 $(porous)/porousModel/porousModel.C
 $(porous)/VollerPrakash/VollerPrakash.C
 
+/* Ununsed? */
+/*
 surfaceTension = interfaceModels/surfaceTensionModels
 $(surfaceTension)/surfaceTensionModel/surfaceTensionModel.C
 $(surfaceTension)/constantSurfaceTensionCoefficient/constantSurfaceTensionCoefficient.C
-
-
-derivedFvPatchFields/timeVaryingMassSorption/timeVaryingMassSorptionFvPatchScalarField.C
+*/
 
 LIB = $(FOAM_LIBBIN)/libincompressibleMultiphaseSystems

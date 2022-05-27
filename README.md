@@ -2,13 +2,13 @@
 ![GitHub](https://img.shields.io/github/license/pzimbrod/lpbfFoam)
 ![Travis (.org)](https://api.travis-ci.com/pzimbrod/lpbfFoam.svg?branch=master)
 ![foam](https://img.shields.io/badge/made%20for-OpenFOAM-blue)
-![2112](https://img.shields.io/badge/Version-2112-blue)
+![2112](https://img.shields.io/badge/Version-2106-blue)
 ![GitHub issues](https://img.shields.io/github/issues/pzimbrod/lpbfFoam)
 ![GitHub last commit](https://img.shields.io/github/last-commit/pzimbrod/lpbfFoam)
 
 # OpenFOAM custom solver lpbfFoam
 
-Source Code for a custom solver, based von OpenFOAM v2112 solver `icoReactingMultiphaseInterFoam`. Its main intended purpose is to model Powder Bed Fusion additive manufacturing (PBF), hence the name.
+Source Code for a custom solver, based von OpenFOAM v2106 solver `icoReactingMultiphaseInterFoam`. Its main intended purpose is to model Powder Bed Fusion additive manufacturing (PBF), hence the name.
 This solver was created due to the lack of a universal formulation for surface tension in the standard solvers. It has been shown however that marangoni stresses influence melt pools during laser melting considerably. This aims to provide a formulation that resolves those stresses in an explicit manner.
 
 ## Features

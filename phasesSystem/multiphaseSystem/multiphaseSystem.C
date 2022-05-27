@@ -358,8 +358,6 @@ void Foam::multiphaseSystem::solveAlphas()
                  Su + fvm::Sp(Sp, alpha1)
             );
 
-            alpha1Eqn.boundaryManipulate(alpha1.boundaryFieldRef());
-
             alpha1Eqn.solve();
 
             phiAlpha += alpha1Eqn.flux();

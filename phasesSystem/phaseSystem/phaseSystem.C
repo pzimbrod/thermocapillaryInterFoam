@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -36,6 +36,9 @@ License
 #include "fvcSnGrad.H"
 #include "fvcDiv.H"
 #include "fvMatrix.H"
+
+#include "fvcReconstruct.H"
+#include "Identity.H"
 
 #include "zeroGradientFvPatchFields.H"
 #include "fixedEnergyFvPatchScalarField.H"
@@ -265,6 +268,7 @@ Foam::phaseSystem::phaseSystem
         generatePairsAndSubModels
         (
             "surfaceTension",
+            mesh_,
             surfaceTensionModels_
         );
     }
@@ -493,18 +497,6 @@ Foam::tmp<Foam::scalarField> Foam::phaseSystem::Cv
     }
 
     return tmpCv;
-}
-
-
-Foam::tmp<Foam::scalarField> Foam::phaseSystem::rhoEoS
-(
-    const scalarField& p,
-    const scalarField& T,
-    const labelList& cells
-) const
-{
-    NotImplemented;
-    return nullptr;
 }
 
 
@@ -1043,10 +1035,6 @@ Foam::phaseSystem::surfaceTensionForce() const
     return tstf;
 }
 
-// Implementation of the capillary Stress tensor divergence
-// Foundation for capillary force calculation
-// First term accounts for Marangoni effects
-// Second term is equivalent to Lafaurie et al., 1994, Appendix
 Foam::tmp<Foam::volVectorField>
 Foam::phaseSystem::divCapillaryStress() const
 {
@@ -1134,7 +1122,6 @@ Foam::phaseSystem::divCapillaryStress() const
     return tcst;
     
 }
-
 
 Foam::tmp<Foam::volVectorField> Foam::phaseSystem::U() const
 {
@@ -1325,7 +1312,6 @@ Foam::tmp<Foam::volVectorField> Foam::phaseSystem::nHat
     // Face unit interface normal
     return gradAlphaf/(mag(gradAlphaf) + deltaN);
 }
-
 
 Foam::tmp<Foam::surfaceScalarField> Foam::phaseSystem::nHatf
 (

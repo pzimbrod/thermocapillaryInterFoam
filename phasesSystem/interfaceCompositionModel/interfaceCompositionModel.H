@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -195,11 +195,11 @@ public:
         ) = 0;
 
         //- Reference value
-        virtual const dimensionedScalar& Tactivate() const noexcept = 0;
+        virtual const dimensionedScalar& Tactivate() const = 0;
 
         //- Add/subtract alpha*div(U) as a source term
         //- for alpha, substituting div(U) = mDot(1/rho1 - 1/rho2)
-        virtual bool includeDivU() const noexcept;
+        virtual bool includeDivU();
 
         //- Add volume change in pEq
         bool includeVolChange();

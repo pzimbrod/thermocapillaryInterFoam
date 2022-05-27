@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -90,9 +90,7 @@ MultiComponentPhaseModel
                 (
                     IOobject::groupName("X" + species_[i], phaseName),
                     fluid.mesh().time().timeName(),
-                    fluid.mesh(),
-                    IOobject::NO_READ,
-                    IOobject::NO_WRITE
+                    fluid.mesh()
                 ),
                 Y()[i]
             )
@@ -118,7 +116,7 @@ void Foam::MultiComponentPhaseModel<BasePhaseModel, phaseThermo>
     {
         const dimensionedScalar Wi
         (
-            "Wi",
+            "W",
             dimMass/dimMoles,
             thermo().composition().W(i)
         );
@@ -128,23 +126,6 @@ void Foam::MultiComponentPhaseModel<BasePhaseModel, phaseThermo>
             X_[i] = W*Y()[i]/Wi;
             Xtotal += X_[i];
             X_[i].correctBoundaryConditions();
-
-            const volScalarField::Boundary& YBf = Y()[i].boundaryField();
-
-            forAll(YBf, patchi)
-            {
-                const fvPatchScalarField& YPf = YBf[patchi];
-                if (YPf.fixesValue())
-                {
-                    scalarField& xbf = X_[i].boundaryFieldRef()[patchi];
-                    const scalarField& ybf = Y()[i].boundaryField()[patchi];
-                    const scalarField& Wbf = W.boundaryField()[patchi];
-                    forAll(xbf, facei)
-                    {
-                        xbf[facei] = Wbf[facei]*ybf[facei]/Wi.value();
-                    }
-                }
-            }
         }
     }
     X_[inertIndex_] = 1.0 - Xtotal;

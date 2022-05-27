@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -74,9 +74,9 @@ Foam::porousModel::New
     Info<< "Selecting porousModel for "
         <<  ": " << modelType << endl;
 
-    auto* ctorPtr = dictionaryConstructorTable(modelType);
+    const auto cstrIter = dictionaryConstructorTablePtr_->cfind(modelType);
 
-    if (!ctorPtr)
+    if (!cstrIter.found())
     {
         FatalIOErrorInLookup
         (
@@ -87,7 +87,7 @@ Foam::porousModel::New
         ) << exit(FatalIOError);
     }
 
-    return ctorPtr(dict, mesh);
+    return cstrIter()(dict, mesh);
 }
 
 

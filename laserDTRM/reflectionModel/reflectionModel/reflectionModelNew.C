@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2019 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -41,9 +41,9 @@ Foam::radiation::reflectionModel::New
 
     Info<< "Selecting reflectionModel " << modelType << endl;
 
-    auto* ctorPtr = dictionaryConstructorTable(modelType);
+    const auto cstrIter = dictionaryConstructorTablePtr_->cfind(modelType);
 
-    if (!ctorPtr)
+    if (!cstrIter.found())
     {
         FatalIOErrorInLookup
         (
@@ -54,7 +54,7 @@ Foam::radiation::reflectionModel::New
         ) << exit(FatalIOError);
     }
 
-    return autoPtr<reflectionModel>(ctorPtr(dict, mesh));
+    return autoPtr<reflectionModel>(cstrIter()(dict, mesh));
 }
 
 

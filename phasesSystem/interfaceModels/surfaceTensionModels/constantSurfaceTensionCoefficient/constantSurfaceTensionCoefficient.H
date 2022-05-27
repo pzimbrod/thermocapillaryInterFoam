@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -38,13 +38,10 @@ SourceFiles
 #define surfaceTensionModels_constantSurfaceTensionCoefficient_H
 
 #include "surfaceTensionModel.H"
-#include "phasePair.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
-{
-namespace multiphaseInter
 {
 namespace surfaceTensionModels
 {
@@ -57,7 +54,7 @@ class constantSurfaceTensionCoefficient
 :
     public surfaceTensionModel
 {
-    // Private Data
+    // Private data
 
         //- Constant surface tension value
         const dimensionedScalar sigma_;
@@ -94,7 +91,6 @@ public:
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 } // End namespace surfaceTensionModels
-} // End namespace multiphaseInter
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

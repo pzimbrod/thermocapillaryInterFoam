@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -94,9 +94,9 @@ Foam::interfaceCompositionModel::New
     Info<< "Selecting interfaceCompositionModel for "
         << pair << ": " << modelType << endl;
 
-    auto* ctorPtr = dictionaryConstructorTable(modelType);
+    const auto cstrIter = dictionaryConstructorTablePtr_->cfind(modelType);
 
-    if (!ctorPtr)
+    if (!cstrIter.found())
     {
         FatalIOErrorInLookup
         (
@@ -107,7 +107,7 @@ Foam::interfaceCompositionModel::New
         ) << exit(FatalIOError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 
@@ -131,7 +131,7 @@ const Foam::word& Foam::interfaceCompositionModel::variable() const
 }
 
 
-bool Foam::interfaceCompositionModel::includeDivU() const noexcept
+bool Foam::interfaceCompositionModel::includeDivU()
 {
     return true;
 }

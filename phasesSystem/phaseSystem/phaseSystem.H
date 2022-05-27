@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -54,10 +54,7 @@ namespace Foam
 {
 
 // Forward Declarations
-namespace multiphaseInter
-{
 class surfaceTensionModel;
-}
 class porousModel;
 
 /*---------------------------------------------------------------------------*\
@@ -98,7 +95,7 @@ protected:
         typedef
             HashTable
             <
-                autoPtr<multiphaseInter::surfaceTensionModel>,
+                autoPtr<surfaceTensionModel>,
                 phasePairKey,
                 phasePairKey::hash
             >
@@ -351,18 +348,6 @@ public:
             const label patchi
         ) const;
 
-        //- Heat capacity using pressure and temperature
-        virtual tmp<scalarField> Cp
-        (
-            const scalarField& p,
-            const scalarField& T,
-            const labelList& cells
-        ) const
-        {
-            NotImplemented;
-            return tmp<scalarField>::New(p);
-        }
-
         //- Return Cv of the mixture
         virtual tmp<volScalarField> Cv() const;
 
@@ -372,14 +357,6 @@ public:
             const scalarField& p,
             const scalarField& T,
             const label patchI
-        ) const;
-
-        //- Density from pressure and temperature
-        virtual tmp<scalarField> rhoEoS
-        (
-            const scalarField& p,
-            const scalarField& T,
-            const labelList& cells
         ) const;
 
         //- Gamma = Cp/Cv []

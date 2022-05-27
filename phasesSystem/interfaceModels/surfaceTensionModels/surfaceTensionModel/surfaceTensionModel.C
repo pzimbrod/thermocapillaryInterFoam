@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -32,17 +32,14 @@ License
 
 namespace Foam
 {
-namespace multiphaseInter
-{
     defineTypeNameAndDebug(surfaceTensionModel, 0);
     defineRunTimeSelectionTable(surfaceTensionModel, dictionary);
-}
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::multiphaseInter::surfaceTensionModel::surfaceTensionModel
+Foam::surfaceTensionModel::surfaceTensionModel
 (
     const dictionary& dict,
     const phasePair& pair,
@@ -67,8 +64,8 @@ Foam::multiphaseInter::surfaceTensionModel::surfaceTensionModel
 
 // * * * * * * * * * * * * * * * * Selectors * * * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::multiphaseInter::surfaceTensionModel>
-Foam::multiphaseInter::surfaceTensionModel::New
+Foam::autoPtr<Foam::surfaceTensionModel>
+Foam::surfaceTensionModel::New
 (
     const dictionary& dict,
     const phasePair& pair
@@ -79,9 +76,9 @@ Foam::multiphaseInter::surfaceTensionModel::New
     Info<< "Selecting surfaceTensionModel for "
         << pair << ": " << modelType << endl;
 
-    auto* ctorPtr = dictionaryConstructorTable(modelType);
+    const auto cstrIter = dictionaryConstructorTablePtr_->cfind(modelType);
 
-    if (!ctorPtr)
+    if (!cstrIter.found())
     {
         FatalIOErrorInLookup
         (
@@ -92,13 +89,13 @@ Foam::multiphaseInter::surfaceTensionModel::New
         ) << exit(FatalIOError);
     }
 
-    return ctorPtr(dict, pair, true);
+    return cstrIter()(dict, pair, true);
 }
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-bool Foam::multiphaseInter::surfaceTensionModel::writeData(Ostream& os) const
+bool Foam::surfaceTensionModel::writeData(Ostream& os) const
 {
     return os.good();
 }

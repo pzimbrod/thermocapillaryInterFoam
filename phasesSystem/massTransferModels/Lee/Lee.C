@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -167,6 +167,22 @@ Foam::meltingEvaporationModels::Lee<Thermo, OtherThermo>::KSu
     {
         return tmp<volScalarField> ();
     }
+}
+
+
+template<class Thermo, class OtherThermo>
+const Foam::dimensionedScalar&
+Foam::meltingEvaporationModels::Lee<Thermo, OtherThermo>::Tactivate() const
+{
+    return Tactivate_;
+}
+
+
+template<class Thermo, class OtherThermo>
+bool
+Foam::meltingEvaporationModels::Lee<Thermo, OtherThermo>::includeDivU()
+{
+    return true;
 }
 
 

@@ -5,8 +5,8 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
+    Copyright (C) 2020 OpenCFD Ltd.
     Copyright (C) 2020 Henning Scheufler
-    Copyright (C) 2020-2021 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -171,17 +171,11 @@ public:
         );
 
         //- Return Tactivate
-        virtual const dimensionedScalar& Tactivate() const noexcept
-        {
-            return Tactivate_;
-        }
+        virtual const dimensionedScalar& Tactivate() const;
 
         //- Add/subtract alpha*div(U) as a source term
         //- for alpha, substituting div(U) = mDot(1/rho1 - 1/rho2)
-        virtual bool includeDivU() const noexcept
-        {
-            return true;
-        }
+        virtual bool includeDivU();
 };
 
 

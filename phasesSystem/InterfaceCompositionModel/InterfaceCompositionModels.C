@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2021 OpenCFD Ltd.
+    Copyright (C) 2017 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -51,7 +51,6 @@ License
 #include "kineticGasEvaporation.H"
 #include "Lee.H"
 #include "interfaceHeatResistance.H"
-#include "interfaceOxideRate.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -574,78 +573,6 @@ namespace Foam
             hPowerSolidThermoPhysics
         );
 
-
-        // interfaceOxideRate model definitions
-
-        // From pure phase (tabulated) to solid phase (const)
-        makeInterfacePureType
-        (
-            interfaceOxideRate,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            tabulatedThermoPhysics,
-            heSolidThermo,
-            solidThermo,
-            pureMixture,
-            hConstSolidThermoPhysics
-        );
-
-        // From pure phase (rho const) to phase (rho const)
-        makeInterfacePureType
-        (
-            interfaceOxideRate,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            constRhoHThermoPhysics,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            constRhoHThermoPhysics
-        );
-
-        // From pure phase (ico) to solid phase (const)
-        makeInterfacePureType
-        (
-            interfaceOxideRate,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            icoPoly8HThermoPhysics,
-            heSolidThermo,
-            solidThermo,
-            pureMixture,
-            hConstSolidThermoPhysics
-        );
-
-        // From pure phase (tabulated) to phase (rho const)
-        makeInterfacePureType
-        (
-            interfaceOxideRate,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            tabulatedThermoPhysics,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            constRhoHThermoPhysics
-        );
-
-        // From pure phase (ico) to phase (rho const)
-        makeInterfacePureType
-        (
-            interfaceOxideRate,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            icoPoly8HThermoPhysics,
-            heRhoThermo,
-            rhoThermo,
-            pureMixture,
-            constRhoHThermoPhysics
-        );
 }
 
 
