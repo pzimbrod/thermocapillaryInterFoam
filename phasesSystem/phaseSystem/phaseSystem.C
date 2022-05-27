@@ -1043,6 +1043,98 @@ Foam::phaseSystem::surfaceTensionForce() const
     return tstf;
 }
 
+// Implementation of the capillary Stress tensor divergence
+// Foundation for capillary force calculation
+// First term accounts for Marangoni effects
+// Second term is equivalent to Lafaurie et al., 1994, Appendix
+Foam::tmp<Foam::volVectorField>
+Foam::phaseSystem::divCapillaryStress() const
+{
+    auto tcst = tmp<volVectorField>::New
+    (
+        IOobject
+        (
+            "capillaryStressTensor",
+            mesh_.time().timeName(),
+            mesh_
+        ),
+        mesh_,
+        dimensionedVector({1, -2, -2, 0, 0, 0}, Zero)
+    );
+
+    auto& cst = tcst.ref();
+    //cst.setOriented();
+
+    /*
+        Implementation of the capillary stress tensor
+        with the Continuous Surface Stress Method
+        iaw Brackbill et al., 1992, Lafaurie et al. 1994
+        T = - sigma * (I - n x n) * mag(grad(alpha))
+          = - sigma * (I * mag(grad(alpha)) - (grad(alpha) x grad(alpha)) /
+            mag(grad(alpha)))
+    */
+
+    if (surfaceTensionModels_.size())
+    {
+        forAllConstIters(phaseModels_, iter1)
+        {
+            const volScalarField& alpha1 = iter1()();
+
+            auto iter2 = iter1;
+
+            for (++iter2; iter2 != phaseModels_.cend(); ++iter2)
+            {
+                const volScalarField& alpha2 = iter2()();
+
+                volVectorField gradAlphaf
+                (
+                    alpha2*fvc::grad(alpha1)
+                    - alpha1*fvc::grad(alpha2)
+                );
+
+                cst +=
+                    mag(gradAlphaf)
+                    *
+                    (
+                        (
+                            (
+                                tensor::I
+                                -
+                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                            )
+                            &
+                            fvc::grad
+                            (
+                                surfaceTensionCoeff
+                                (
+                                    phasePairKey(iter1()->name(), iter2()->name())
+                                )
+                            )
+                        )
+                    )
+                    +
+                    surfaceTensionCoeff
+                    (
+                        phasePairKey(iter1()->name(), iter2()->name())
+                    )
+                    *
+                    fvc::div
+                    (
+                        tensor::I
+                        -
+                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                    )
+                    *
+                    mag(gradAlphaf)
+                    ;
+            }
+        }
+    }
+
+    return tcst;
+    
+}
+
 
 Foam::tmp<Foam::volVectorField> Foam::phaseSystem::U() const
 {
@@ -1199,6 +1291,29 @@ Foam::tmp<Foam::surfaceVectorField> Foam::phaseSystem::nHatfv
     (
         fvc::interpolate(alpha2)*fvc::interpolate(fvc::grad(alpha1))
       - fvc::interpolate(alpha1)*fvc::interpolate(fvc::grad(alpha2))
+    );
+
+    const dimensionedScalar deltaN
+    (
+        "deltaN",
+        1e-8/cbrt(average(mesh_.V()))
+    );
+
+    // Face unit interface normal
+    return gradAlphaf/(mag(gradAlphaf) + deltaN);
+}
+
+Foam::tmp<Foam::volVectorField> Foam::phaseSystem::nHat
+(
+    const volScalarField& alpha1,
+    const volScalarField& alpha2
+) const
+{
+
+    volVectorField gradAlphaf
+    (
+        alpha2*fvc::grad(alpha1)
+      - alpha1*fvc::grad(alpha2)
     );
 
     const dimensionedScalar deltaN

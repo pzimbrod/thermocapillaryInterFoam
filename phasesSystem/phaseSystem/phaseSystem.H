@@ -513,6 +513,9 @@ public:
             const phasePairKey& key
         ) const;
 
+        //- Calculate divergence of the capillary stress tensor
+	    tmp<volVectorField> divCapillaryStress() const;
+
 
         //- Return coefficients (1/rho)
         virtual tmp<volScalarField> coeffs(const word& key) const;
@@ -636,6 +639,12 @@ public:
             const volScalarField& alpha2
         ) const;
 
+        //- Interface normal vector
+        tmp<volVectorField> nHat
+        (
+            const volScalarField& alpha1,
+            const volScalarField& alpha2
+        ) const;
 
         //- Interface normal volume vector
         tmp<surfaceScalarField> nHatf
