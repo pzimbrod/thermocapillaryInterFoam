@@ -25,6 +25,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+      - name: Env
+        run: source /openfoam/bash.rc
+        
+      - name: Clean
+        run: ./Allwclean
         
       - name: Build
         run: ./Allwmake -j
