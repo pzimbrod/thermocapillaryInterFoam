@@ -26,6 +26,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # go into lpbfFoam directory
-      - name: Go to dir
-        run: ls -la
+      # Clean the environment
+      - name: Clean all
+        run: ./Allwclean
+        
+      - name: Build
+        run: ./Allwmake -j
