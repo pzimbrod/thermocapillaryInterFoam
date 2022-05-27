@@ -1,7 +1,7 @@
 phaseSystem = $(LIB_SRC)/phaseSystemModels/multiphaseInter
 
 EXE_INC = \
-    -I${phaseSystem}/phasesSystem/lnInclude \
+    -I./phasesSystem/lnInclude \
     -I${phaseSystem}/compressibleMultiPhaseTurbulenceModels/lnInclude \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/fvOptions/lnInclude\

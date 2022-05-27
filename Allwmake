@@ -4,6 +4,7 @@ cd "${0%/*}" || exit                                # Run from this directory
 #------------------------------------------------------------------------------
 
 wmake $targetType laserDTRM
+wmake $targetType phasesSystem
 wmake $targetType
 
 #------------------------------------------------------------------------------
