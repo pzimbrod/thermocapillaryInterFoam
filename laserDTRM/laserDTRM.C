@@ -343,12 +343,12 @@ Foam::radiation::laserDTRM::laserDTRM(const volScalarField& T)
 
     focalLaserPosition_
     (
-        Function1<point>::New("focalLaserPosition", *this)
+        Function1<point>::New("focalLaserPosition", *this, &mesh_)
     ),
 
     laserDirection_
     (
-        Function1<vector>::New("laserDirection", *this)
+        Function1<vector>::New("laserDirection", *this, &mesh_)
     ),
 
     focalLaserRadius_(get<scalar>("focalLaserRadius")),
@@ -359,7 +359,7 @@ Foam::radiation::laserDTRM::laserDTRM(const volScalarField& T)
 
     sigma_(0),
     I0_(0),
-    laserPower_(Function1<scalar>::New("laserPower", *this)),
+    laserPower_(Function1<scalar>::New("laserPower", *this, &mesh_)),
     powerDistribution_(),
 
     reflectionSwitch_(false),
@@ -441,11 +441,11 @@ Foam::radiation::laserDTRM::laserDTRM
 
     focalLaserPosition_
     (
-        Function1<point>::New("focalLaserPosition", *this)
+        Function1<point>::New("focalLaserPosition", *this, &mesh_)
     ),
     laserDirection_
     (
-        Function1<vector>::New("laserDirection", *this)
+        Function1<vector>::New("laserDirection", *this, &mesh_)
     ),
 
     focalLaserRadius_(get<scalar>("focalLaserRadius")),
@@ -456,7 +456,7 @@ Foam::radiation::laserDTRM::laserDTRM
 
     sigma_(0),
     I0_(0),
-    laserPower_(Function1<scalar>::New("laserPower", *this)),
+    laserPower_(Function1<scalar>::New("laserPower", *this, &mesh_)),
     powerDistribution_(),
 
     reflectionSwitch_(false),
@@ -593,8 +593,6 @@ void Foam::radiation::laserDTRM::calculate()
 
     labelField reflectingCells(mesh_.nCells(), -1);
 
-    autoPtr<interpolationCellPoint<vector>> nHatIntrPtr;
-
     UPtrList<reflectionModel> reflectionUPtr;
 
     if (reflectionSwitch_)
@@ -653,10 +651,7 @@ void Foam::radiation::laserDTRM::calculate()
         }
     }
 
-    nHatIntrPtr.reset
-    (
-        new interpolationCellPoint<vector>(nHat)
-    );
+    interpolationCellPoint<vector> nHatInterp(nHat);
 
     DTRMParticle::trackingData td
     (
@@ -665,7 +660,7 @@ void Foam::radiation::laserDTRM::calculate()
         eInterp,
         EInterp,
         TInterp,
-        nHatIntrPtr,
+        nHatInterp,
         reflectingCells,
         reflectionUPtr,
         Q_
@@ -679,8 +674,8 @@ void Foam::radiation::laserDTRM::calculate()
     // Normalize by cell volume
     Q_.primitiveFieldRef() /= mesh_.V();
 
-    // if (debug)
-    // {
+    if (debug)
+    {
         Info<< "Final number of particles..."
             << returnReduce(DTRMCloud_.size(), sumOp<label>()) << endl;
 
@@ -707,7 +702,7 @@ void Foam::radiation::laserDTRM::calculate()
         Pstream::gatherList(p0);
         Pstream::scatterList(p0);
 
-        for (label proci = 0; proci < Pstream::nProcs(); ++proci)
+        for (const int proci : Pstream::allProcs())
         {
             const pointField& pos = positions[proci];
             const pointField& pfinal = p0[proci];
@@ -731,7 +726,7 @@ void Foam::radiation::laserDTRM::calculate()
             reflectingCellsVol.write();
             nHat.write();
         }
-    // }
+    }
 
     // Clear and initialise the cloud
     // NOTE: Possible to reset original particles, but this requires

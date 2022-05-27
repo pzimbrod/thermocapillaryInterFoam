@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2020 OpenCFD Ltd.
+    Copyright (C) 2017-2021 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -42,16 +42,14 @@ Description
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
+#include "dynamicFvMesh.H"
 #include "subCycle.H"
 #include "multiphaseSystem.H"
 #include "turbulentFluidThermoModel.H"
 #include "pimpleControl.H"
 #include "fvOptions.H"
-#include "fixedFluxPressureFvPatchScalarField.H"
 #include "radiationModel.H"
-#include "HashPtrTable.H"
-#include "fvcDDt.H"
-#include "zeroField.H"
+#include "CorrectPhi.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -62,7 +60,6 @@ int main(int argc, char *argv[])
         "Solver for N incompressible, non-isothermal immiscible fluids with"
         " phase-change,"
         " using VOF phase-fraction based interface capturing.\n"
-	" Intended primarily for modelling of powder bed fusion processes. \n"
         "With optional mesh motion and mesh topology changes including"
         " adaptive re-meshing."
     );
@@ -71,14 +68,18 @@ int main(int argc, char *argv[])
 
     #include "setRootCaseLists.H"
     #include "createTime.H"
-    #include "createMesh.H"
+    #include "createDynamicFvMesh.H"
 
-    pimpleControl pimple(mesh);
+    #include "initContinuityErrs.H"
+    #include "createDyMControls.H"
 
     #include "createFields.H"
     #include "createFieldRefs.H"
+
+    #include "initCorrectPhi.H"
+    #include "createUfIfPresent.H"
+
     #include "createFvOptions.H"
-    #include "createTimeControls.H"
     #include "CourantNo.H"
     #include "setInitialDeltaT.H"
 
@@ -90,7 +91,8 @@ int main(int argc, char *argv[])
 
     while (runTime.run())
     {
-        #include "readTimeControls.H"
+        #include "readDyMControls.H"
+
         #include "CourantNo.H"
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
@@ -106,6 +108,28 @@ int main(int argc, char *argv[])
         // --- Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
+            if (pimple.firstIter() || moveMeshOuterCorrectors)
+            {
+                mesh.update();
+
+                if (mesh.changing())
+                {
+                    gh = (g & mesh.C()) - ghRef;
+                    ghf = (g & mesh.Cf()) - ghRef;
+
+                    if (correctPhi)
+                    {
+                        // Calculate absolute flux
+                        // from the mapped surface velocity
+                        phi = mesh.Sf() & Uf();
+
+                        #include "correctPhi.H"
+
+                        // Make the flux relative to the mesh motion
+                        fvc::makeRelative(phi, U);
+                    }
+                }
+            }
             #include "UEqn.H"
             #include "YEqns.H"
             #include "TEqn.H"
