@@ -19,21 +19,20 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    container: opencfd/openfoam2112-default
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    container: 
+      image: opencfd/openfoam2112-default
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
       - name: Env
         run: source /openfoam/bash.rc
         shell: bash
-        
+
       - name: Clean
         run: ./Allwclean
         shell: bash
-        
+
       - name: Build
         run: ./Allwmake -j
         shell: bash
