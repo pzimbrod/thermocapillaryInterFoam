@@ -30,9 +30,9 @@ jobs:
         shell: bash
 
       - name: Clean
-        run: ./Allwclean
+        run: wclean
         shell: bash
 
       - name: Build
-        run: ./Allwmake -j
+        run: wmake -j
         shell: bash
