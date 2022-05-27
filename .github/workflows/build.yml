@@ -28,4 +28,4 @@ jobs:
 
       # go into lpbfFoam directory
       - name: Go to dir
-        run: cd lpbfFoam
+        run: ls -la
