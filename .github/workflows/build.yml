@@ -28,9 +28,12 @@ jobs:
       
       - name: Env
         run: source /openfoam/bash.rc
+        shell: bash
         
       - name: Clean
         run: ./Allwclean
+        shell: bash
         
       - name: Build
         run: ./Allwmake -j
+        shell: bash
