@@ -1,4 +1,5 @@
 {
+    gradT = mag(fvc::grad(T));
     radiation->correct();
     rhoCp =  rho*fluid.Cp();
 

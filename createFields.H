@@ -42,6 +42,19 @@
         mesh
     );
 
+    volScalarField gradT
+    (
+        IOobject
+        (
+            "gradT",
+            runTime.timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        mag(fvc::grad(T))
+    );
+
 
     Info<< "Calculating field g.h\n" << endl;
     #include "readGravitationalAcceleration.H"
