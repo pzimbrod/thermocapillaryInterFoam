@@ -33,6 +33,6 @@ jobs:
 
       - name: Clean
         run: |
-          sudo wclean
-          sudo wmake -j
+          sudo ./Allwclean
+          sudo ./Allwmake -j
         shell: openfoam2106 {0}
