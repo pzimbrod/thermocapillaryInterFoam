@@ -20,24 +20,21 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     container: 
-      image: cong666/openfoam2106-default
+      image: opencfd/openfoam2106-default
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         
+      - name: Build tools
+        run: sudo apt-get update && apt-get -y install build-essential
+      
       - name: Source OpenFOAM Environment
         run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
       - name: Make executables
         run: |
-            chmod +x Allwclean
-            chmod +x Allwmake
-        shell: openfoam2106 {0}
-
-      - name: Clean
-        run: ./Allwclean
-        shell: openfoam2106 {0}
-
-      - name: Build
-        run: ./Allwmake -j
+            sudo chmod +x Allwclean
+            sudo chmod +x Allwmake
+            ./Allwclean
+            ./Allwmake
         shell: openfoam2106 {0}
