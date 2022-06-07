@@ -32,5 +32,7 @@ jobs:
         run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
       - name: Clean
-        run: sudo wclean && sudo wmake -j
+        run: |
+          sudo wclean
+          sudo wmake -j
         shell: openfoam2106 {0}
