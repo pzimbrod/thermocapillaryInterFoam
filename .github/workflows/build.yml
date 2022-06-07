@@ -30,12 +30,12 @@ jobs:
       
       - name: Source OpenFOAM Environment
         run: source /usr/lib/openfoam/openfoam2106/etc/bashrc || true
-        shell: bash
+        shell: /usr/bin/openfoam2106 {0}
 
       - name: Clean
         run: wclean
-        shell: bash
+        shell: /usr/bin/openfoam2106 {0}
 
       - name: Build
         run: wmake -j
-        shell: bash
+        shell: /usr/bin/openfoam2106 {0}
