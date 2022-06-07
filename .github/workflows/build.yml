@@ -32,7 +32,9 @@ jobs:
         run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
       - name: Clean
-        run: |
-          sudo ./Allwclean
-          sudo ./Allwmake -j
+        run: ./Allwclean
+        shell: openfoam2106 {0}
+
+      - name: Build
+        run: ./Allwmake -j
         shell: openfoam2106 {0}
