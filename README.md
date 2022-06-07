@@ -42,9 +42,9 @@ The thory is based on the following references:
 
 ## Usage
 
-This solver uses a set of proprietary models that come with it. For the original compilation, OpenFOAM ESI in Version 2006 was used. Upwards and downwards compatibility can not be ensured, but should likely be possible with few modifications to the Makefiles.
+This solver uses a set of proprietary models that come with it. For the original compilation, OpenFOAM ESI in Version 2106 was used. Upwards and downwards compatibility can not be ensured, but should likely be possible with few modifications to the Makefiles.
 
-I will continue to support v2006 and not migrate to later versions as `icoReactingMultiphaseInterFoam` packages its own libraries in this version and does not rely on the global ones in `src`.
+I will continue to support v2106 and not migrate to later versions as `icoReactingMultiphaseInterFoam` is partly dependent on the global libraries packaged in `src` but also comes with own implementations. In versions after 2106, the dependencies have changed and thus compatibility cannot be guaranteed.
 
 Clone the repo and compile the source code using the `Allwmake` script. Requires the standard set of compilers used by standard OpenFOAM installations. After that, you can call the solver in the standard OpenFOAM way from the terminal with the command `lpbfFoam`.
 
