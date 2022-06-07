@@ -34,8 +34,8 @@ jobs:
 
       - name: Clean
         run: wclean
-        shell: /usr/bin/openfoam2106 {0}
+        shell: openfoam2106 {0}
 
       - name: Build
         run: wmake -j
-        shell: /usr/bin/openfoam2106 {0}
+        shell: openfoam2106 {0}
