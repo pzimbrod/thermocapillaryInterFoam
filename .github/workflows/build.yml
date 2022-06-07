@@ -33,9 +33,5 @@ jobs:
       #  shell: /usr/bin/openfoam2106 {0}
 
       - name: Clean
-        run: sudo wclean
-        shell: openfoam2106 {0}
-
-      - name: Build
-        run: sudo wmake -j
+        run: sudo chmod +x openfoam2106 && sudo wclean && sudo wmake -j
         shell: openfoam2106 {0}
