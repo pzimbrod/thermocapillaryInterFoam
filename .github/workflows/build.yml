@@ -31,6 +31,12 @@ jobs:
       - name: Source OpenFOAM Environment
         run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
+      - name: Make executables
+        run: |
+            chmod +x Allwclean
+            chmod +x Allwmake
+        shell: openfoam2106 {0}
+
       - name: Clean
         run: ./Allwclean
         shell: openfoam2106 {0}
