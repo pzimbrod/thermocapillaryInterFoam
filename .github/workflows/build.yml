@@ -28,14 +28,12 @@ jobs:
       - name: Build tools
         run: sudo apt-get update && apt-get -y install build-essential
       
-      #- name: Source OpenFOAM Environment
-      #  run: source /usr/lib/openfoam/openfoam2106/etc/bashrc || true
-      #  shell: /usr/bin/openfoam2106 {0}
+      - name: Source OpenFOAM Environment
+        run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
-      - name: Clean
-        run: wclean
-        shell: openfoam2106 {0}
-
-      - name: Build
-        run: wmake -j
-        shell: openfoam2106 {0}
+      - name: Make executables
+        run: |
+            sudo chmod +x Allwclean
+            sudo chmod +x Allwmake
+            /usr/lib/openfoam/openfoam2106/etc/openfoam ./Allwclean
+            /usr/lib/openfoam/openfoam2106/etc/openfoam ./Allwmake
