@@ -29,7 +29,7 @@ jobs:
         run: sudo apt-get update && apt-get -y install build-essential
       
       - name: Source OpenFOAM Environment
-        run: source /usr/lib/openfoam/openfoam2106/etc/bashrc
+        run: source /usr/lib/openfoam/openfoam2106/etc/bashrc || true
         shell: bash
 
       - name: Clean
