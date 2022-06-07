@@ -35,6 +35,5 @@ jobs:
         run: |
             sudo chmod +x Allwclean
             sudo chmod +x Allwmake
-            ./Allwclean
-            ./Allwmake
-        shell: openfoam2106 {0}
+            /usr/lib/openfoam/openfoam2106/etc/openfoam ./Allwclean
+            /usr/lib/openfoam/openfoam2106/etc/openfoam ./Allwmake
