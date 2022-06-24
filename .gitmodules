@@ -1,0 +1,3 @@
+[submodule "WENOEXT"]
+	path = WENOEXT
+	url = https://github.com/WENO-OF/WENOEXT.git
