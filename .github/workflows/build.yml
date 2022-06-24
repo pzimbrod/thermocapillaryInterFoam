@@ -25,16 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
         
       - name: Build tools
         run: sudo apt-get update && apt-get -y install build-essential cmake git
       
-      - name: Clone submodules
-        run:  |
-            auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-            git submodule sync --recursive
-            git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=2
-
       - name: Source OpenFOAM Environment
         run: sudo chmod +x /usr/lib/openfoam/openfoam2106/etc/openfoam
 
