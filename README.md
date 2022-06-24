@@ -1,15 +1,15 @@
 [![DOI](https://zenodo.org/badge/368456876.svg)](https://zenodo.org/badge/latestdoi/368456876)
-![GitHub](https://img.shields.io/github/license/pzimbrod/lpbfFoam)
-![Travis (.org)](https://api.travis-ci.com/pzimbrod/lpbfFoam.svg?branch=master)
+![GitHub](https://img.shields.io/github/license/pzimbrod/thermocapillaryInterFoam)
+![Travis (.org)](https://api.travis-ci.com/pzimbrod/thermocapillaryInterFoam.svg?branch=master)
 ![foam](https://img.shields.io/badge/made%20for-OpenFOAM-blue)
 ![2112](https://img.shields.io/badge/Version-2106-blue)
-![GitHub issues](https://img.shields.io/github/issues/pzimbrod/lpbfFoam)
-![GitHub last commit](https://img.shields.io/github/last-commit/pzimbrod/lpbfFoam)
+![GitHub issues](https://img.shields.io/github/issues/pzimbrod/thermocapillaryInterFoam)
+![GitHub last commit](https://img.shields.io/github/last-commit/pzimbrod/thermocapillaryInterFoam)
 
-# OpenFOAM custom solver lpbfFoam
+# OpenFOAM custom solver thermocapillaryInterFoam
 
-Source Code for a custom solver, based von OpenFOAM v2106 solver `icoReactingMultiphaseInterFoam`. Its main intended purpose is to model Powder Bed Fusion additive manufacturing (PBF), hence the name.
-This solver was created due to the lack of a universal formulation for surface tension in the standard solvers. It has been shown however that marangoni stresses influence melt pools during laser melting considerably. This aims to provide a formulation that resolves those stresses in an explicit manner.
+Source Code for a custom solver, based von OpenFOAM v2106 solver `icoReactingMultiphaseInterFoam`. Its main intended purpose is to model surface tension dependent interface flows, hence the name.
+This solver was created due to the lack of a universal formulation for surface tension in the standard solvers. It has been shown however that marangoni stresses influence e.g. melt pools during laser melting considerably. This aims to provide a formulation that resolves those stresses in an explicit manner.
 
 ## Features
 
@@ -19,6 +19,8 @@ This solver was created due to the lack of a universal formulation for surface t
 * Heat input using `laserDTRM`
 * Fluid surface tension forces
 * Marangoni force
+* Adaptive Mesh refinement
+* High order WENO stencils for spatial discretization
 
 ## Theory
 
@@ -46,7 +48,7 @@ This solver uses a set of proprietary models that come with it. For the original
 
 I will continue to support v2106 and not migrate to later versions as `icoReactingMultiphaseInterFoam` is partly dependent on the global libraries packaged in `src` but also comes with own implementations. In versions after 2106, the dependencies have changed and thus compatibility cannot be guaranteed.
 
-Clone the repo and compile the source code using the `Allwmake` script. Requires the standard set of compilers used by standard OpenFOAM installations. After that, you can call the solver in the standard OpenFOAM way from the terminal with the command `lpbfFoam`.
+Clone the repo (using `--recurse-submodules` to also fetch external libraries) and compile the source code using the `Allwmake` script. Requires the standard set of compilers used by standard OpenFOAM installations as well as CMake for `WENOEXT` (WENO stencils). After that, you can call the solver in the standard OpenFOAM way from the terminal with the command `thermocapillaryInterFoam`.
 
 ## Citing
 
