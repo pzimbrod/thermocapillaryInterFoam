@@ -16,7 +16,8 @@ EXE_INC = \
     -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/reactionThermo/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/interFoam
+    -I$(FOAM_SOLVERS)/multiphase/interFoam \
+    -I./WENOEXT/build/libWENOEXT
 
 EXE_LIBS = \
     -lfiniteVolume \
