@@ -120,7 +120,7 @@ Foam::surfaceTensionModels::temperatureDependent::dSigmadT() const
             false
         ),
         mesh_,
-        dSigmadT_
+        dimdSigmadT
     );
     auto& dSigmadT = tdSigmadT.ref();
 

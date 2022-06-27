@@ -59,6 +59,8 @@ class constantSurfaceTensionCoefficient
         //- Constant surface tension value
         const dimensionedScalar sigma_;
 
+        //- dSigmadT must be zero here
+        const dimensionedScalar dSigmadT_;
 
 public:
 
