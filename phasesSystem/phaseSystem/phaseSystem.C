@@ -1086,14 +1086,13 @@ Foam::phaseSystem::divCapillaryStress(
                     *
                     (
                         (
+                            fvc::grad(T)
+                            &
                             (
                                 tensor::I
                                 -
                                 nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                             )
-                            &
-                            fvc::grad(T)
-                            
                         )
                         *
                         dSigmadT
