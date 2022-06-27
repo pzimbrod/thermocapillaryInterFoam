@@ -1036,7 +1036,9 @@ Foam::phaseSystem::surfaceTensionForce() const
 }
 
 Foam::tmp<Foam::volVectorField>
-Foam::phaseSystem::divCapillaryStress() const
+Foam::phaseSystem::divCapillaryStress(
+    const volScalarField& T
+) const
 {
     auto tcst = tmp<volVectorField>::New
     (
@@ -1051,7 +1053,9 @@ Foam::phaseSystem::divCapillaryStress() const
     );
 
     auto& cst = tcst.ref();
-    //cst.setOriented();
+
+    // Identity tensor / Kronecker delta
+    tensor I(1,0,0,0,1,0,0,0,1);
 
     /*
         Implementation of the capillary stress tensor
@@ -1086,7 +1090,7 @@ Foam::phaseSystem::divCapillaryStress() const
                     (
                         (
                             (
-                                tensor::I
+                                I
                                 -
                                 nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                             )
@@ -1108,7 +1112,7 @@ Foam::phaseSystem::divCapillaryStress() const
                     *
                     fvc::div
                     (
-                        tensor::I
+                        I
                         -
                         nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                     )

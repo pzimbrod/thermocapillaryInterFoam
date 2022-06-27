@@ -491,7 +491,9 @@ public:
         ) const;
 
         //- Calculate divergence of the capillary stress tensor
-	    tmp<volVectorField> divCapillaryStress() const;
+	    tmp<volVectorField> divCapillaryStress(
+            const volScalarField& T
+        ) const;
 
 
         //- Return coefficients (1/rho)

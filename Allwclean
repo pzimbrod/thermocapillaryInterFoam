@@ -3,6 +3,7 @@ cd "${0%/*}" || exit    # Run from this directory
 #------------------------------------------------------------------------------
 
 wclean libso laserDTRM
+wclean libso interfaceProperties
 wclean libso phasesSystem
 ./WENOEXT/Allwclean
 wclean

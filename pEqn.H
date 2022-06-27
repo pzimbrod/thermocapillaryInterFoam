@@ -31,6 +31,7 @@
     (
         (
             fluid.surfaceTensionForce()
+            //fvc::interpolate(mag(fluid.divCapillaryStress()))
           - ghf*fvc::snGrad(rho)
         )*rAUf*mesh.magSf()
     );

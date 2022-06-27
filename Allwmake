@@ -9,6 +9,7 @@ echo "Building external libraries"
 echo "Building application"
 wmake $targetType laserDTRM
 wmake $targetType phasesSystem
+wmake $targetType interfaceProperties
 wmake $targetType
 
 
