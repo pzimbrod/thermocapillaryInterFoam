@@ -1094,11 +1094,9 @@ Foam::phaseSystem::divCapillaryStress(
                             &
                             fvc::grad(T)
                             *
+                            dSigmadT
                             (
-                                dSigmadT
-                                (
-                                    phasePairKey(iter1()->name(), iter2()->name())
-                                )
+                                phasePairKey(iter1()->name(), iter2()->name())
                             )
                         )
                     )
