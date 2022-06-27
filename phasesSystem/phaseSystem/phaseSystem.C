@@ -1058,9 +1058,6 @@ Foam::phaseSystem::divCapillaryStress(
         Implementation of the capillary stress tensor
         with the Continuous Surface Stress Method
         iaw Brackbill et al., 1992, Lafaurie et al. 1994
-        T = - sigma * (I - n x n) * mag(grad(alpha))
-          = - sigma * (I * mag(grad(alpha)) - (grad(alpha) x grad(alpha)) /
-            mag(grad(alpha)))
     */
 
     if (surfaceTensionModels_.size())
@@ -1084,37 +1081,32 @@ Foam::phaseSystem::divCapillaryStress(
                 cst +=
                     mag(gradAlphaf)
                     *
+                    /* Tangential (Marangoni) force */
                     (
                         (
                             fvc::grad(T)
-                            &
-                            (
-                                tensor::I
-                                -
-                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                            -
+                            nHat(alpha1,alpha2) * (
+                                nHat(alpha1,alpha2)
+                                & fvc::grad(T)
                             )
                         )
                         *
-                        dSigmadT
-                        (
+                        dSigmadT(
                             phasePairKey(iter1()->name(), iter2()->name())
                         )
-                    )
-                    +
-                    surfaceTensionCoeff
-                    (
-                        phasePairKey(iter1()->name(), iter2()->name())
-                    )
-                    *
-                    fvc::div
-                    (
-                        I
-                        -
-                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                    )
-                    *
-                    mag(gradAlphaf)
-                    ;
+                        +
+                    /* Normal surface tension force */
+                        surfaceTensionCoeff(
+                            phasePairKey(iter1()->name(), iter2()->name())
+                        )
+                        *
+                        fvc::div(
+                            tensor::I
+                            -
+                            nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                        )
+                    );
             }
         }
     }
