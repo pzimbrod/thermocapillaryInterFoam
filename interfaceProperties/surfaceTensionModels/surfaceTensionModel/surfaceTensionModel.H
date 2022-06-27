@@ -144,6 +144,9 @@ public:
         //- Surface tension coefficient
         virtual tmp<volScalarField> sigma() const = 0;
 
+        //- Surface tension temperature coefficient
+        virtual tmp<volScalarField> dSigmadT() const = 0;
+
         //- Update surface tension coefficient from given dictionary
         virtual bool readDict(const dictionary& dict) = 0;
 

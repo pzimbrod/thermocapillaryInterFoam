@@ -57,7 +57,8 @@ Foam::surfaceTensionModels::temperatureDependent::temperatureDependent
 :
     surfaceTensionModel(mesh),
     TName_(dict.getOrDefault<word>("T", "T")),
-    sigma_(Function1<scalar>::New("sigma", dict))
+    sigma_(Function1<scalar>::New("sigma", dict)),
+    dSigmadT_(Function1<scalar>::New("dSigmadT", dict))
 {}
 
 
@@ -102,6 +103,42 @@ Foam::surfaceTensionModels::temperatureDependent::sigma() const
 
     return tsigma;
 }
+
+ //- Implementation of surface tension temperature coefficient
+Foam::tmp<Foam::volScalarField>
+Foam::surfaceTensionModels::temperatureDependent::dSigmadT() const
+{
+    auto tdSigmadT = tmp<volScalarField>::New
+    (
+        IOobject
+        (
+            "dSigmadT",
+            mesh_.time().timeName(),
+            mesh_,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            false
+        ),
+        mesh_,
+        dSigmadT_
+    );
+    auto& dSigmadT = tdSigmadT.ref();
+
+    const volScalarField& T = mesh_.lookupObject<volScalarField>(TName_);
+
+    dSigmadT.field() = dSigmadT_->value(T.field());
+
+    volScalarField::Boundary& dSigmadTBf = dSigmadT.boundaryFieldRef();
+    const volScalarField::Boundary& TBf = T.boundaryField();
+
+    forAll(dSigmadTBf, patchi)
+    {
+        dSigmadTBf[patchi] = dSigmadT_->value(TBf[patchi]);
+    }
+
+    return tdSigmadT;
+}
+
 
 
 bool Foam::surfaceTensionModels::temperatureDependent::readDict

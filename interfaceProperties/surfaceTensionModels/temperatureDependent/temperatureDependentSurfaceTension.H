@@ -88,6 +88,8 @@ class temperatureDependent
         //- Surface-tension function
         autoPtr<Function1<scalar>> sigma_;
 
+        //- Surface-tension temperature coefficient
+	    autoPtr<Function1<scalar>> dSigmadT_;
 
 public:
 
@@ -113,6 +115,9 @@ public:
 
         //- Surface tension coefficient
         virtual tmp<volScalarField> sigma() const;
+
+        //- Surface tension temperature coefficient
+	    virtual tmp<volScalarField> dSigmadT() const;
 
         //- Update surface tension coefficient from given dictionary
         virtual bool readDict(const dictionary& dict);

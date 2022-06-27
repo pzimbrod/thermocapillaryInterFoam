@@ -81,6 +81,29 @@ Foam::surfaceTensionModels::constant::sigma() const
     );
 }
 
+Foam::tmp<Foam::volScalarField>
+Foam::surfaceTensionModels::constant::dSigmadT() const
+{
+    /*
+    return tmp<volScalarField>::New
+    (
+        IOobject
+        (
+            "dSigmadT",
+            mesh_.time().timeName(),
+            mesh_,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            false
+        ),
+        mesh_,
+        dSigmadT_
+    );
+    */
+    return 0;
+}
+
+
 
 bool Foam::surfaceTensionModels::constant::readDict(const dictionary& dict)
 {
