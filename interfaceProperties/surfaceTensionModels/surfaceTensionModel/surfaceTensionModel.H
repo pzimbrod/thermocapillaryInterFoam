@@ -119,6 +119,8 @@ public:
         //- Surface tension coefficient dimensions
         static const dimensionSet dimSigma;
 
+        //- Surface tension temperature coefficient dimensions
+        static const dimensionSet dimdSigmadT;
 
     // Constructors
 

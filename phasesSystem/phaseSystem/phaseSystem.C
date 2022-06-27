@@ -1054,9 +1054,6 @@ Foam::phaseSystem::divCapillaryStress(
 
     auto& cst = tcst.ref();
 
-    // Identity tensor / Kronecker delta
-    tensor I(1,0,0,0,1,0,0,0,1);
-
     /*
         Implementation of the capillary stress tensor
         with the Continuous Surface Stress Method
@@ -1090,14 +1087,15 @@ Foam::phaseSystem::divCapillaryStress(
                     (
                         (
                             (
-                                I
+                                tensor::I
                                 -
                                 nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                             )
                             &
-                            fvc::grad
+                            fvc::grad(T)
+                            *
                             (
-                                surfaceTensionCoeff
+                                dSigmadT
                                 (
                                     phasePairKey(iter1()->name(), iter2()->name())
                                 )
@@ -1158,6 +1156,12 @@ Foam::phaseSystem::surfaceTensionCoeff(const phasePairKey& key) const
     return surfaceTensionModels_[key]->sigma();
 }
 
+//- Read the surface tension temperature dependence
+Foam::tmp<Foam::volScalarField>
+Foam::phaseSystem::dSigmadT(const phasePairKey& key) const
+{
+    return surfaceTensionModels_[key]->dSigmadT();
+}
 
 Foam::tmp<Foam::volScalarField> Foam::phaseSystem::coeffs
 (

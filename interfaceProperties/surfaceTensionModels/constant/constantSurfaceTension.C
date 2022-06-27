@@ -50,7 +50,8 @@ Foam::surfaceTensionModels::constant::constant
 )
 :
     surfaceTensionModel(mesh),
-    sigma_("sigma", dimMass/sqr(dimTime), dict)
+    sigma_("sigma", dimMass/sqr(dimTime), dict),
+    dSigmadT_("dSigmadT", dimMass/sqr(dimTime)/dimTemperature, dict)
 {}
 
 

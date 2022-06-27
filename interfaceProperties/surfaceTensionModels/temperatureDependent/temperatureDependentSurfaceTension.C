@@ -151,6 +151,10 @@ bool Foam::surfaceTensionModels::temperatureDependent::readDict
     TName_ = sigmaDict.getOrDefault<word>("T", "T");
     sigma_ = Function1<scalar>::New("sigma", sigmaDict);
 
+    // Read surface tension temperature coefficient
+    // Handle sub-dictionary format as a special case
+    dSigmadT_ = Function1<scalar>::New("dSigmadT", sigmaDict);
+
     return true;
 }
 

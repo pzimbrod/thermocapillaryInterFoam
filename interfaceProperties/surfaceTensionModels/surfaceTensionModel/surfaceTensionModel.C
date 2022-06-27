@@ -37,6 +37,8 @@ namespace Foam
 }
 
 const Foam::dimensionSet Foam::surfaceTensionModel::dimSigma(1, 0, -2, 0, 0);
+// dSigmadT has different dim than sigma
+const Foam::dimensionSet Foam::surfaceTensionModel::dimdSigmadT(1, 0, -2, -1, 0);
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //

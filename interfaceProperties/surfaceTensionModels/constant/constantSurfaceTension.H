@@ -73,6 +73,8 @@ class constant
         //- Surface tension coefficient
         dimensionedScalar sigma_;
 
+        //- Surface tension temperature coefficient - needs to be zero here
+    	dimensionedScalar dSigmadT_;
 
 public:
 

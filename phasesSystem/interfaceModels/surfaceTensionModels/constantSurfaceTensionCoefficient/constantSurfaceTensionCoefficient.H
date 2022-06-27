@@ -85,6 +85,9 @@ public:
 
         //- Aspect ratio
         virtual tmp<volScalarField> sigma() const;
+
+        //- Surface tension temperature coefficient
+        virtual tmp<volScalarField> dSigmadT() const = 0;
 };
 
 
