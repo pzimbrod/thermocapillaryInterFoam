@@ -27,7 +27,7 @@ if (pimple.momentumPredictor())
             ) * mesh.magSf()
         )
         -
-        fluid.divCapillaryStress()
+        fluid.divCapillaryStress(T)
     );
 
     fvOptions.correct(U);

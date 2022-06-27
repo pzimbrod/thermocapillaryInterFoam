@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2020 OpenCFD Ltd.
+    Copyright (C) 2017 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,106 +24,97 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::surfaceTensionModel
+    Foam::surfaceTensionModels::constant
 
 Description
+    Uniform constant surface tension model.
+
+Usage
+    Example of the surface tension specification:
+    \verbatim
+        sigma
+        {
+            type                constant;
+            sigma               0.07;
+        }
+    \endverbatim
+
+See also
+    Foam::surfaceTensionModel
 
 SourceFiles
-    surfaceTensionModel.C
+    constantSurfaceTension.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef surfaceTensionModel_H
-#define surfaceTensionModel_H
+#ifndef constantSurfaceTension_H
+#define constantSurfaceTension_H
+
+#include "surfaceTensionModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#include "volFields.H"
-#include "dictionary.H"
-#include "runTimeSelectionTables.H"
 
 namespace Foam
 {
 
-// Forward Declarations
-class phasePair;
+namespace surfaceTensionModels
+{
 
 /*---------------------------------------------------------------------------*\
-                     Class surfaceTensionModel Declaration
+                           Class constant Declaration
 \*---------------------------------------------------------------------------*/
 
-class surfaceTensionModel
+class constant
 :
-    public regIOobject
+    public surfaceTensionModel
 {
-protected:
+    // Private data
 
-    // Protected Data
+        //- Surface tension coefficient
+        dimensionedScalar sigma_;
 
-        //- Phase pair
-        const phasePair& pair_;
-
+        //- Surface tension temperature coefficient - needs to be zero here
+    	dimensionedScalar dSigmadT_;
 
 public:
 
     //- Runtime type information
-    TypeName("surfaceTensionModel");
-
-
-    // Declare runtime construction
-    declareRunTimeSelectionTable
-    (
-        autoPtr,
-        surfaceTensionModel,
-        dictionary,
-        (
-            const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
-        ),
-        (dict, pair, registerObject)
-    );
+    TypeName("constant");
 
 
     // Constructors
 
-        //- Construct from a dictionary and a phase pair
-        surfaceTensionModel
+        //- Construct from dictionary and mesh
+        constant
         (
             const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
+            const fvMesh& mesh
         );
 
 
     //- Destructor
-    virtual ~surfaceTensionModel() = default;
-
-
-    // Selectors
-
-        static autoPtr<surfaceTensionModel> New
-        (
-            const dictionary& dict,
-            const phasePair& pair
-        );
+    virtual ~constant();
 
 
     // Member Functions
 
-        //- Surface tension
-        virtual tmp<volScalarField> sigma() const = 0;
+        //- Surface tension coefficient
+        virtual tmp<volScalarField> sigma() const;
 
-        //- Surface tension temperature coefficient
-        virtual tmp<volScalarField> dSigmadT() const = 0;
+        //- Surface tension temperature coefficient - needs to be zero here
+	    virtual tmp<volScalarField> dSigmadT() const;
 
-        //- Dummy write for regIOobject
-        bool writeData(Ostream& os) const;
+        //- Update surface tension coefficient from given dictionary
+        virtual bool readDict(const dictionary& dict);
+
+        //- Write in dictionary format
+        virtual bool writeData(Ostream& os) const;
 };
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace surfaceTensionModels
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

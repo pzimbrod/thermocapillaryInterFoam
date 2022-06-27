@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2020 OpenCFD Ltd.
+    Copyright (C) 2011 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,101 +24,58 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::surfaceTensionModel
+    Foam::interfaceCompressionLimiter
 
 Description
+    Interface compression scheme currently based on the generic limited
+    scheme although it does not use the NVD/TVD functions.
 
 SourceFiles
-    surfaceTensionModel.C
+    interfaceCompression.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef surfaceTensionModel_H
-#define surfaceTensionModel_H
+#ifndef interfaceCompression_H
+#define interfaceCompression_H
+
+#include "vector.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#include "volFields.H"
-#include "dictionary.H"
-#include "runTimeSelectionTables.H"
 
 namespace Foam
 {
 
-// Forward Declarations
-class phasePair;
-
 /*---------------------------------------------------------------------------*\
-                     Class surfaceTensionModel Declaration
+                           Class interfaceCompressionWeight Declaration
 \*---------------------------------------------------------------------------*/
 
-class surfaceTensionModel
-:
-    public regIOobject
+class interfaceCompressionLimiter
 {
-protected:
-
-    // Protected Data
-
-        //- Phase pair
-        const phasePair& pair_;
-
 
 public:
 
-    //- Runtime type information
-    TypeName("surfaceTensionModel");
+    interfaceCompressionLimiter(Istream&)
+    {}
 
-
-    // Declare runtime construction
-    declareRunTimeSelectionTable
+    scalar limiter
     (
-        autoPtr,
-        surfaceTensionModel,
-        dictionary,
-        (
-            const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
-        ),
-        (dict, pair, registerObject)
-    );
+        const scalar cdWeight,
+        const scalar faceFlux,
+        const scalar phiP,
+        const scalar phiN,
+        const vector&,
+        const scalar
+    ) const
+    {
+        // Quadratic compression scheme
+        //return min(max(4*min(phiP*(1 - phiP), phiN*(1 - phiN)), 0), 1);
 
-
-    // Constructors
-
-        //- Construct from a dictionary and a phase pair
-        surfaceTensionModel
-        (
-            const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
-        );
-
-
-    //- Destructor
-    virtual ~surfaceTensionModel() = default;
-
-
-    // Selectors
-
-        static autoPtr<surfaceTensionModel> New
-        (
-            const dictionary& dict,
-            const phasePair& pair
-        );
-
-
-    // Member Functions
-
-        //- Surface tension
-        virtual tmp<volScalarField> sigma() const = 0;
-
-        //- Surface tension temperature coefficient
-        virtual tmp<volScalarField> dSigmadT() const = 0;
-
-        //- Dummy write for regIOobject
-        bool writeData(Ostream& os) const;
+        // Quartic compression scheme
+        return
+            min(max(
+            1 - max(sqr(1 - 4*phiP*(1 - phiP)), sqr(1 - 4*phiN*(1 - phiN))),
+            0), 1);
+    }
 };
 
 

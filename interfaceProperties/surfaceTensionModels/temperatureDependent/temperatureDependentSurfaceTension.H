@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017 OpenCFD Ltd.
+    Copyright (C) 2017 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,72 +24,106 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::surfaceTensionModels::constantSurfaceTensionCoefficient
+    Foam::surfaceTensionModels::temperatureDependent
 
 Description
-    Constant value surface tension model.
+    Temperature-dependent surface tension model.
+
+    The surface tension is evaluated from the specified Foam::Function1 for the
+    temperature field looked-up from the mesh database the name of which
+    may optionally be provided.
+
+Usage
+    \table
+        Property     | Description               | Required    | Default value
+        T            | Temperature field name    | no          | T
+        sigma        | Surface tension function  | yes         |
+    \endtable
+
+    Example of the surface tension specification:
+    \verbatim
+        sigma
+        {
+            type                temperatureDependent;
+            sigma               constant 0.07;
+        }
+    \endverbatim
+
+See also
+    Foam::surfaceTensionModel
+    Foam::Function1
 
 SourceFiles
-    constantSurfaceTensionCoefficient.C
+    temperatureDependentSurfaceTension.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef surfaceTensionModels_constantSurfaceTensionCoefficient_H
-#define surfaceTensionModels_constantSurfaceTensionCoefficient_H
+#ifndef temperatureDependentSurfaceTension_H
+#define temperatureDependentSurfaceTension_H
 
 #include "surfaceTensionModel.H"
+#include "Function1.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
+
 namespace surfaceTensionModels
 {
 
 /*---------------------------------------------------------------------------*\
-              Class constantSurfaceTensionCoefficient Declaration
+                           Class temperatureDependent Declaration
 \*---------------------------------------------------------------------------*/
 
-class constantSurfaceTensionCoefficient
+class temperatureDependent
 :
     public surfaceTensionModel
 {
     // Private data
 
-        //- Constant surface tension value
-        const dimensionedScalar sigma_;
+        //- Name of temperature field, default = "T"
+        word TName_;
 
-        //- dSigmadT must be zero here
-        const dimensionedScalar dSigmadT_;
+        //- Surface-tension function
+        autoPtr<Function1<scalar>> sigma_;
+
+        //- Surface-tension temperature coefficient
+	    autoPtr<Function1<scalar>> dSigmadT_;
 
 public:
 
     //- Runtime type information
-    TypeName("constant");
+    TypeName("temperatureDependent");
 
 
     // Constructors
 
-        //- Construct from a dictionary and a phase pair
-        constantSurfaceTensionCoefficient
+        //- Construct from dictionary and mesh
+        temperatureDependent
         (
             const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
+            const fvMesh& mesh
         );
 
 
     //- Destructor
-    virtual ~constantSurfaceTensionCoefficient() = default;
+    virtual ~temperatureDependent();
 
 
     // Member Functions
 
-        //- Aspect ratio
+        //- Surface tension coefficient
         virtual tmp<volScalarField> sigma() const;
 
         //- Surface tension temperature coefficient
-        virtual tmp<volScalarField> dSigmadT() const = 0;
+	    virtual tmp<volScalarField> dSigmadT() const;
+
+        //- Update surface tension coefficient from given dictionary
+        virtual bool readDict(const dictionary& dict);
+
+        //- Write in dictionary format
+        virtual bool writeData(Ostream& os) const;
 };
 
 

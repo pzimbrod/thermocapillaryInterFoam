@@ -7,6 +7,7 @@ echo "Building external libraries"
 ./WENOEXT/Allwmake
 
 echo "Building application"
+wmake $targetType interfaceProperties
 wmake $targetType laserDTRM
 wmake $targetType phasesSystem
 wmake $targetType

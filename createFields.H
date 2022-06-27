@@ -166,3 +166,17 @@
 
     Info<< "Creating field kinetic energy K\n" << endl;
     volScalarField K("K", 0.5*magSqr(U));
+
+    Info<< "Creating field divCapillaryStress\n" <<endl;
+    volVectorField divCapillaryStress
+    (
+        IOobject
+        (
+            "divCapillaryStress",
+            runTime.timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        fluid.divCapillaryStress(T)
+    );

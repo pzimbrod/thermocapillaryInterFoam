@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017 OpenCFD Ltd.
+    Copyright (C) 2017 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,8 +25,8 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "constantSurfaceTensionCoefficient.H"
-#include "phasePair.H"
+#include "constantSurfaceTension.H"
+#include "volFields.H"
 #include "addToRunTimeSelectionTable.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -35,52 +35,51 @@ namespace Foam
 {
 namespace surfaceTensionModels
 {
-    defineTypeNameAndDebug(constantSurfaceTensionCoefficient, 0);
-    addToRunTimeSelectionTable
-    (
-        surfaceTensionModel,
-        constantSurfaceTensionCoefficient,
-        dictionary
-    );
+    defineTypeNameAndDebug(constant, 0);
+    addToRunTimeSelectionTable(surfaceTensionModel, constant, dictionary);
 }
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::surfaceTensionModels::constantSurfaceTensionCoefficient::
-constantSurfaceTensionCoefficient
+Foam::surfaceTensionModels::constant::constant
 (
     const dictionary& dict,
-    const phasePair& pair,
-    const bool registerObject
+    const fvMesh& mesh
 )
 :
-    surfaceTensionModel(dict, pair, registerObject),
+    surfaceTensionModel(mesh),
     sigma_("sigma", dimMass/sqr(dimTime), dict),
     dSigmadT_("dSigmadT", dimMass/sqr(dimTime)/dimTemperature, dict)
 {}
 
 
-// * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
+
+Foam::surfaceTensionModels::constant::~constant()
+{}
+
+
+// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::surfaceTensionModels::constantSurfaceTensionCoefficient::sigma() const
+Foam::surfaceTensionModels::constant::sigma() const
 {
-    const fvMesh& mesh(this->pair_.phase1().mesh());
-
-    return
-        tmp<volScalarField>::New
+    return tmp<volScalarField>::New
+    (
+        IOobject
         (
-            IOobject
-            (
-                "zero",
-                mesh.time().timeName(),
-                mesh
-            ),
-            mesh,
-            sigma_
-        );
+            "sigma",
+            mesh_.time().timeName(),
+            mesh_,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            false
+        ),
+        mesh_,
+        sigma_
+    );
 }
 
 Foam::tmp<Foam::volScalarField>
@@ -103,6 +102,35 @@ Foam::surfaceTensionModels::constant::dSigmadT() const
     );
     */
     return 0;
+}
+
+
+
+bool Foam::surfaceTensionModels::constant::readDict(const dictionary& dict)
+{
+    // Handle sub-dictionary format as a special case
+    if (dict.isDict("sigma"))
+    {
+        dict.subDict("sigma").readEntry("sigma", sigma_);
+    }
+    else
+    {
+        dict.readEntry("sigma", sigma_);
+    }
+
+    return true;
+}
+
+
+bool Foam::surfaceTensionModels::constant::writeData(Ostream& os) const
+{
+    if (surfaceTensionModel::writeData(os))
+    {
+        os  << sigma_ << token::END_STATEMENT << nl;
+        return os.good();
+    }
+
+    return false;
 }
 
 

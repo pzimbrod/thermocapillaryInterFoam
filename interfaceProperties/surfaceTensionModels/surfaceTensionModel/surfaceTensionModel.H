@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2017-2020 OpenCFD Ltd.
+    Copyright (C) 2017 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -27,29 +27,50 @@ Class
     Foam::surfaceTensionModel
 
 Description
+    Abstract base-class for surface tension models which return the surface
+    tension coefficient field.
+
+Usage
+    Example of the surface tension specification:
+    \verbatim
+        sigma
+        {
+            type                <surface tension model type>;
+            <coefficient name>  <coefficient value>;
+            .
+            .
+            .
+        }
+    \endverbatim
+    For simplicity and backward-compatibility the constant value format is
+    also supported, e.g.
+    \verbatim
+        sigma           0.07;
+    \endverbatim
 
 SourceFiles
     surfaceTensionModel.C
+    newSurfaceTensionModel.C
 
 \*---------------------------------------------------------------------------*/
 
 #ifndef surfaceTensionModel_H
 #define surfaceTensionModel_H
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#include "volFields.H"
-#include "dictionary.H"
+#include "regIOobject.H"
+#include "dimensionedTypes.H"
+#include "volFieldsFwd.H"
 #include "runTimeSelectionTables.H"
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 
-// Forward Declarations
-class phasePair;
+class fvMesh;
 
 /*---------------------------------------------------------------------------*\
-                     Class surfaceTensionModel Declaration
+                           Class surfaceTensionModel Declaration
 \*---------------------------------------------------------------------------*/
 
 class surfaceTensionModel
@@ -58,10 +79,18 @@ class surfaceTensionModel
 {
 protected:
 
-    // Protected Data
+    // Protected member data
 
-        //- Phase pair
-        const phasePair& pair_;
+        //- Reference to mesh
+        const fvMesh& mesh_;
+
+
+    // Protected member functions
+
+        static const dictionary& sigmaDict(const dictionary& dict)
+        {
+            return dict.subDict("sigma");
+        }
 
 
 public:
@@ -71,33 +100,36 @@ public:
 
 
     // Declare runtime construction
-    declareRunTimeSelectionTable
-    (
-        autoPtr,
-        surfaceTensionModel,
-        dictionary,
+
+        declareRunTimeSelectionTable
         (
-            const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
-        ),
-        (dict, pair, registerObject)
-    );
-
-
-    // Constructors
-
-        //- Construct from a dictionary and a phase pair
-        surfaceTensionModel
-        (
-            const dictionary& dict,
-            const phasePair& pair,
-            const bool registerObject
+            autoPtr,
+            surfaceTensionModel,
+            dictionary,
+            (
+                const dictionary& dict,
+                const fvMesh& mesh
+            ),
+            (dict, mesh)
         );
 
 
+    // Static data members
+
+        //- Surface tension coefficient dimensions
+        static const dimensionSet dimSigma;
+
+        //- Surface tension temperature coefficient dimensions
+        static const dimensionSet dimdSigmadT;
+
+    // Constructors
+
+        // Construct from mesh
+        surfaceTensionModel(const fvMesh& mesh);
+
+
     //- Destructor
-    virtual ~surfaceTensionModel() = default;
+    virtual ~surfaceTensionModel();
 
 
     // Selectors
@@ -105,20 +137,23 @@ public:
         static autoPtr<surfaceTensionModel> New
         (
             const dictionary& dict,
-            const phasePair& pair
+            const fvMesh& mesh
         );
 
 
     // Member Functions
 
-        //- Surface tension
+        //- Surface tension coefficient
         virtual tmp<volScalarField> sigma() const = 0;
 
         //- Surface tension temperature coefficient
         virtual tmp<volScalarField> dSigmadT() const = 0;
 
-        //- Dummy write for regIOobject
-        bool writeData(Ostream& os) const;
+        //- Update surface tension coefficient from given dictionary
+        virtual bool readDict(const dictionary& dict) = 0;
+
+        //- Write in dictionary format
+        virtual bool writeData(Ostream& os) const = 0;
 };
 
 
