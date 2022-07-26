@@ -26,7 +26,7 @@ if (pimple.momentumPredictor())
                 - fvc::snGrad(p_rgh)
             ) * mesh.magSf()
         )
-        -
+        +
         fluid.divCapillaryStress()
     );
 

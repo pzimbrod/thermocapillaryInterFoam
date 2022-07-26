@@ -27,12 +27,16 @@
         fvc::makeAbsolute(phiHbyA, U);
     }
 
+    #include "fvcFlux.H"
     surfaceScalarField phig
     (
         (
-            fluid.surfaceTensionForce()
-          - ghf*fvc::snGrad(rho)
-        )*rAUf*mesh.magSf()
+            //fluid.surfaceTensionForce()
+            //fvc::interpolate(mag(fluid.divCapillaryStress())) * mesh.magSf()
+          - ghf*fvc::snGrad(rho) * mesh.magSf()
+          + fvc::flux(fluid.divCapillaryStress())
+        )
+        *rAUf
     );
 
     phiHbyA += phig;

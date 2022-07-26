@@ -1074,23 +1074,17 @@ Foam::phaseSystem::divCapillaryStress() const
             {
                 const volScalarField& alpha2 = iter2()();
 
-                volVectorField gradAlphaf
+                volVectorField gradAlpha
                 (
                     alpha2*fvc::grad(alpha1)
                     - alpha1*fvc::grad(alpha2)
                 );
 
                 cst +=
-                    mag(gradAlphaf)
+                    mag(gradAlpha)
                     *
                     (
                         (
-                            (
-                                tensor::I
-                                -
-                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                            )
-                            &
                             fvc::grad
                             (
                                 surfaceTensionCoeff
@@ -1098,22 +1092,28 @@ Foam::phaseSystem::divCapillaryStress() const
                                     phasePairKey(iter1()->name(), iter2()->name())
                                 )
                             )
+                            &
+                            (
+                                tensor::I
+                                -
+                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                            )
+                        )
+                        +
+                        (
+                            surfaceTensionCoeff
+                            (
+                                phasePairKey(iter1()->name(), iter2()->name())
+                            )
+                            *
+                            fvc::div
+                            (
+                                tensor::I
+                                -
+                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
+                            )
                         )
                     )
-                    +
-                    surfaceTensionCoeff
-                    (
-                        phasePairKey(iter1()->name(), iter2()->name())
-                    )
-                    *
-                    fvc::div
-                    (
-                        tensor::I
-                        -
-                        nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                    )
-                    *
-                    mag(gradAlphaf)
                     ;
             }
         }
