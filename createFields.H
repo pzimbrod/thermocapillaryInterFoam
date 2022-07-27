@@ -26,6 +26,7 @@
         mesh
     );
 
+
     // Note: construct T to be around before the thermos. The thermos will
     //       not update T.
     Info<< "Reading field T\n" << endl;
@@ -163,10 +164,6 @@
     );
     rhoCp.oldTime();
 
-
-    Info<< "Creating field kinetic energy K\n" << endl;
-    volScalarField K("K", 0.5*magSqr(U));
-
     Info<< "Creating field divCapillaryStress\n" <<endl;
     volVectorField divCapillaryStress
     (
@@ -178,5 +175,8 @@
             IOobject::READ_IF_PRESENT,
             IOobject::AUTO_WRITE
         ),
-        fluid.divCapillaryStress(T)
+        fluid.divCapillaryStress()
     );
+
+    Info<< "Creating field kinetic energy K\n" << endl;
+    volScalarField K("K", 0.5*magSqr(U));

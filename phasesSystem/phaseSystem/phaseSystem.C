@@ -1036,9 +1036,7 @@ Foam::phaseSystem::surfaceTensionForce() const
 }
 
 Foam::tmp<Foam::volVectorField>
-Foam::phaseSystem::divCapillaryStress(
-    const volScalarField& T
-) const
+Foam::phaseSystem::divCapillaryStress() const
 {
     auto tcst = tmp<volVectorField>::New
     (
@@ -1058,6 +1056,7 @@ Foam::phaseSystem::divCapillaryStress(
         Implementation of the capillary stress tensor
         with the Continuous Surface Stress Method
         iaw Brackbill et al., 1992, Lafaurie et al. 1994
+        T = - sigma * (I - n x n) * mag(grad(alpha))
     */
 
     if (surfaceTensionModels_.size())
@@ -1072,41 +1071,31 @@ Foam::phaseSystem::divCapillaryStress(
             {
                 const volScalarField& alpha2 = iter2()();
 
-                volVectorField gradAlphaf
+                volVectorField gradAlpha
                 (
                     alpha2*fvc::grad(alpha1)
                     - alpha1*fvc::grad(alpha2)
                 );
 
                 cst +=
-                    mag(gradAlphaf)
-                    *
-                    /* Tangential (Marangoni) force */
+                    fvc::div
                     (
+                        mag(gradAlpha)
+                        *
                         (
-                            fvc::grad(T)
-                            -
-                            nHat(alpha1,alpha2) * (
-                                nHat(alpha1,alpha2)
-                                & fvc::grad(T)
+                            surfaceTensionCoeff
+                            (
+                                phasePairKey(iter1()->name(), iter2()->name())
+                            )
+                            *
+                            (
+                                tensor::I
+                                -
+                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
                             )
                         )
-                        *
-                        dSigmadT(
-                            phasePairKey(iter1()->name(), iter2()->name())
-                        )
-                        +
-                    /* Normal surface tension force */
-                        surfaceTensionCoeff(
-                            phasePairKey(iter1()->name(), iter2()->name())
-                        )
-                        *
-                        fvc::div(
-                            tensor::I
-                            -
-                            nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                        )
-                    );
+                    )
+                    ;
             }
         }
     }
@@ -1146,12 +1135,6 @@ Foam::phaseSystem::surfaceTensionCoeff(const phasePairKey& key) const
     return surfaceTensionModels_[key]->sigma();
 }
 
-//- Read the surface tension temperature dependence
-Foam::tmp<Foam::volScalarField>
-Foam::phaseSystem::dSigmadT(const phasePairKey& key) const
-{
-    return surfaceTensionModels_[key]->dSigmadT();
-}
 
 Foam::tmp<Foam::volScalarField> Foam::phaseSystem::coeffs
 (

@@ -59,8 +59,6 @@ class constantSurfaceTensionCoefficient
         //- Constant surface tension value
         const dimensionedScalar sigma_;
 
-        //- dSigmadT must be zero here
-        const dimensionedScalar dSigmadT_;
 
 public:
 
@@ -87,9 +85,6 @@ public:
 
         //- Aspect ratio
         virtual tmp<volScalarField> sigma() const;
-
-        //- Surface tension temperature coefficient
-        virtual tmp<volScalarField> dSigmadT() const = 0;
 };
 
 

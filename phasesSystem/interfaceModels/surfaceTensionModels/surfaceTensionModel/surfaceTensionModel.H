@@ -114,9 +114,6 @@ public:
         //- Surface tension
         virtual tmp<volScalarField> sigma() const = 0;
 
-        //- Surface tension temperature coefficient
-        virtual tmp<volScalarField> dSigmadT() const = 0;
-
         //- Dummy write for regIOobject
         bool writeData(Ostream& os) const;
 };

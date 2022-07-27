@@ -21,13 +21,12 @@ if (pimple.momentumPredictor())
         fvc::reconstruct
         (
             (
-                //fluid.surfaceTensionForce()
                 - ghf*fvc::snGrad(rho)
                 - fvc::snGrad(p_rgh)
             ) * mesh.magSf()
         )
-        -
-        fluid.divCapillaryStress(T)
+        +
+        fluid.divCapillaryStress()
     );
 
     fvOptions.correct(U);

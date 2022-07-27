@@ -57,8 +57,7 @@ constantSurfaceTensionCoefficient
 )
 :
     surfaceTensionModel(dict, pair, registerObject),
-    sigma_("sigma", dimMass/sqr(dimTime), dict),
-    dSigmadT_("dSigmadT", dimMass/sqr(dimTime)/dimTemperature, dict)
+    sigma_("sigma", dimMass/sqr(dimTime), dict)
 {}
 
 
@@ -81,28 +80,6 @@ Foam::surfaceTensionModels::constantSurfaceTensionCoefficient::sigma() const
             mesh,
             sigma_
         );
-}
-
-Foam::tmp<Foam::volScalarField>
-Foam::surfaceTensionModels::constant::dSigmadT() const
-{
-    /*
-    return tmp<volScalarField>::New
-    (
-        IOobject
-        (
-            "dSigmadT",
-            mesh_.time().timeName(),
-            mesh_,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE,
-            false
-        ),
-        mesh_,
-        dSigmadT_
-    );
-    */
-    return 0;
 }
 
 
