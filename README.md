@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/368456876.svg)](https://zenodo.org/badge/latestdoi/368456876)
 ![GitHub](https://img.shields.io/github/license/pzimbrod/thermocapillaryInterFoam)
-![Travis (.org)](https://api.travis-ci.com/pzimbrod/thermocapillaryInterFoam.svg?branch=master)
+[![Travis (.org)](https://api.travis-ci.com/pzimbrod/thermocapillaryInterFoam.svg?branch=master)](https://img.shields.io/github/workflow/status/pzimbrod/thermocapillaryInterFoam/CI)
 ![foam](https://img.shields.io/badge/made%20for-OpenFOAM-blue)
 ![2112](https://img.shields.io/badge/Version-2106-blue)
 ![GitHub issues](https://img.shields.io/github/issues/pzimbrod/thermocapillaryInterFoam)
