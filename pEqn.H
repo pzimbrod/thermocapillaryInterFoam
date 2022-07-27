@@ -31,8 +31,6 @@
     surfaceScalarField phig
     (
         (
-            //fluid.surfaceTensionForce()
-            //fvc::interpolate(mag(fluid.divCapillaryStress())) * mesh.magSf()
           - ghf*fvc::snGrad(rho) * mesh.magSf()
           + fvc::flux(fluid.divCapillaryStress())
         )

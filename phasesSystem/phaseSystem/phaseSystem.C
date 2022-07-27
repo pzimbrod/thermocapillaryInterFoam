@@ -1051,15 +1051,12 @@ Foam::phaseSystem::divCapillaryStress() const
     );
 
     auto& cst = tcst.ref();
-    //cst.setOriented();
 
     /*
         Implementation of the capillary stress tensor
         with the Continuous Surface Stress Method
         iaw Brackbill et al., 1992, Lafaurie et al. 1994
         T = - sigma * (I - n x n) * mag(grad(alpha))
-          = - sigma * (I * mag(grad(alpha)) - (grad(alpha) x grad(alpha)) /
-            mag(grad(alpha)))
     */
 
     if (surfaceTensionModels_.size())
@@ -1081,32 +1078,16 @@ Foam::phaseSystem::divCapillaryStress() const
                 );
 
                 cst +=
-                    mag(gradAlpha)
-                    *
+                    fvc::div
                     (
-                        (
-                            fvc::grad
-                            (
-                                surfaceTensionCoeff
-                                (
-                                    phasePairKey(iter1()->name(), iter2()->name())
-                                )
-                            )
-                            &
-                            (
-                                tensor::I
-                                -
-                                nHat(alpha1,alpha2) * nHat(alpha1,alpha2)
-                            )
-                        )
-                        +
+                        mag(gradAlpha)
+                        *
                         (
                             surfaceTensionCoeff
                             (
                                 phasePairKey(iter1()->name(), iter2()->name())
                             )
                             *
-                            fvc::div
                             (
                                 tensor::I
                                 -
