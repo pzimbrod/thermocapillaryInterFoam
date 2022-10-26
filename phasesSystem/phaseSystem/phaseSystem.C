@@ -1080,7 +1080,7 @@ Foam::phaseSystem::divCapillaryStress() const
                 cst +=
                     fvc::div
                     (
-                        mag(gradAlpha)
+                        2*mag(gradAlpha)
                         *
                         (
                             surfaceTensionCoeff

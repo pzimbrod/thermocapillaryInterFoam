@@ -175,7 +175,7 @@
             IOobject::READ_IF_PRESENT,
             IOobject::AUTO_WRITE
         ),
-        fluid.divCapillaryStress()
+	fluid.divCapillaryStress()
     );
 
     Info<< "Creating field kinetic energy K\n" << endl;

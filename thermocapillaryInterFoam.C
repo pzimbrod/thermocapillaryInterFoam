@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
         }
 
         rho = fluid.rho();
+	divCapillaryStress = fluid.divCapillaryStress();
 
         runTime.write();
 
