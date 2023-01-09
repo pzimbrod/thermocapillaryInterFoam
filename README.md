@@ -52,4 +52,18 @@ Clone the repo (using `--recurse-submodules` to also fetch external libraries) a
 
 ## Citing
 
-Please cite this code when using it in your projects.
+Please cite this code when using it in your projects:
+
+```
+@INPROCEEDINGS{
+9988504,
+author={Zimbrod, Patrick and Schreter, Magdalena and Schilp, Johannes},
+booktitle={2022 International Conference on Electrical, Computer, Communications and Mechatronics Engineering (ICECCME)},
+title={Efficient Simulation of Complex Capillary Effects in Advanced Manufacturing Processes using the Finite Volume Method},
+year={2022},
+volume={},
+number={},
+pages={1-6},
+doi={10.1109/ICECCME55909.2022.9988504}
+}
+```
